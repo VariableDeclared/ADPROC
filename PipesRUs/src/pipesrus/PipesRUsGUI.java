@@ -50,6 +50,13 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         newButton.addActionListener(this);
         return newButton;
     }
+    
+    private JRadioButton createAndReturnJRadioButtonWithName(String name)
+    {
+        JRadioButton newButton = new JRadioButton(name);
+        newButton.addActionListener(this);
+        return newButton;
+    }
     private void initInterface()
     {
         //this.setLayout(new FlowLayout());
@@ -63,6 +70,36 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         tabOnePanel.add(goButton);*/
         
         tabOnePanel.add(this.createAndReturnJButtonWithName("Go"));
+        ButtonGroup colourButtons = new ButtonGroup();
+        
+        //init colour buttons
+        //JRadioButton noColour = this.createAndReturnJRadioButtonWithName("No colour");
+        
+        JPanel innerPanel = new JPanel();
+        innerPanel.add(this.createAndReturnJRadioButtonWithName("No colour"));
+        innerPanel.add(this.createAndReturnJRadioButtonWithName("One colour"));
+        innerPanel.add(this.createAndReturnJRadioButtonWithName("Two colour"));
+        
+        tabOnePanel.add(innerPanel);
+        
+        //select no colour by default
+        // do it here
+        
+        JTextField textBox = new JTextField("Enter grade here");
+        textBox.addActionListener(this);
+        tabOnePanel.add(textBox);
+        
+        JToggleButton innerInsulation = new JToggleButton("Inner Insulation");
+        innerInsulation.addActionListener(this);
+        tabOnePanel.add(innerInsulation);
+        
+        JToggleButton outReinforcement = new JToggleButton("Outer reinforcement");
+        outReinforcement.addActionListener(this);
+        tabOnePanel.add(outReinforcement);
+        
+        JToggleButton chemicalResistance = new JToggleButton("Chemical Resistance");
+        chemicalResistance.addActionListener(this);
+        tabOnePanel.add(chemicalResistance);
         
         mainInterface.addTab("Tab 1", tabOnePanel);
         mainInterface.addTab("Tab 2", tabTwoPanel);
