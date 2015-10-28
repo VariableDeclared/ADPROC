@@ -44,7 +44,12 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         //Not sure yet......
         print("EVNETFAFGFWKRFW");
     }
-
+    private JButton createAndReturnJButtonWithName(String name)
+    {
+        JButton newButton = new JButton(name);
+        newButton.addActionListener(this);
+        return newButton;
+    }
     private void initInterface()
     {
         //this.setLayout(new FlowLayout());
@@ -53,10 +58,11 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         JPanel tabOnePanel = new JPanel();
         JPanel tabTwoPanel = new JPanel();
         //init panels
-        JButton goButton = new JButton("Go");
+       /* JButton goButton = new JButton("Go");
         goButton.addActionListener(this);
-        tabOnePanel.add(goButton);
+        tabOnePanel.add(goButton);*/
         
+        tabOnePanel.add(this.createAndReturnJButtonWithName("Go"));
         
         mainInterface.addTab("Tab 1", tabOnePanel);
         mainInterface.addTab("Tab 2", tabTwoPanel);
