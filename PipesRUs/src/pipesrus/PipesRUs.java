@@ -14,7 +14,6 @@ public class PipesRUs {
     /**
      * @param args the command line arguments
      */
-
     public static void main(String[] args) {
         //Instiate the gui
         PipesRUsGUI gui = new PipesRUsGUI(0.8);
@@ -22,3 +21,4 @@ public class PipesRUs {
         gui.setVisible(true);
         
     }
+}
