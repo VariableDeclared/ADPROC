@@ -15,7 +15,12 @@ public class PipesRUs {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        //Instiate the gui
+        PipesRUsGUI gui = new PipesRUsGUI(0.8);
+        
+        gui.setVisible(true);
+        
+        
     }
     
 }
