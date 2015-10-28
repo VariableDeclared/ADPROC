@@ -107,12 +107,16 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         //this.setLayout(new FlowLayout());
         JPanel tabOnePanel = new JPanel();
         JPanel tabTwoPanel = new JPanel();
-
+        tabOnePanel.setLayout(new BorderLayout());
+        JPanel centrePanel = new JPanel();
+        JPanel lowerPanel = new JPanel();
+        JPanel upperPanel = new JPanel();
+        
         //init panels
         // tabOnePanel.setLayout(new FlowLayout());
-        tabOnePanel.add(this.createAndReturnJButtonWithName("Go"));
+        lowerPanel.add(this.createAndReturnJButtonWithName("Go"));
         ButtonGroup colourButtons = new ButtonGroup();
-
+        
         //init colour buttons
         //JRadioButton noColour = this.createAndReturnJRadioButtonWithName("No colour");
         ButtonGroup colourGroup = new ButtonGroup();
@@ -123,21 +127,38 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         colourGroup.add(noColour);
         colourGroup.add(oneColour);
         colourGroup.add(twoColour);
-        this.addToPanel(tabOnePanel,
+        
+        this.addToPanel(centrePanel,
                 new AbstractButton[]{noColour, oneColour, twoColour});
 
         //select no colour by default
         // do it here
         JTextField textBox = new JTextField("Enter grade here");
+        textBox.setToolTipText("Put the grade (From 1-5) in here.");
+        textBox.addFocusListener(new FocusListener() { 
+                public void focusGained(FocusEvent e)
+                {
+                    textBox.selectAll();
+                    
+                }
+                
+                public void focusLost(FocusEvent e)
+                {
+                    textBox.select(0, 0);
+                }
+        });
         textBox.addActionListener(this);
-        tabOnePanel.add(textBox);
+        centrePanel.add(textBox);
 
-        tabOnePanel.add(createJToggleButtonWithName("Inner Insulation"));
+        centrePanel.add(createJToggleButtonWithName("Inner Insulation"));
 
-        tabOnePanel.add(createJToggleButtonWithName("Outer reinforcement"));
+        centrePanel.add(createJToggleButtonWithName("Outer reinforcement"));
 
-        tabOnePanel.add(createJToggleButtonWithName("Chemical Resistance"));
+        centrePanel.add(createJToggleButtonWithName("Chemical Resistance"));
 
+        tabOnePanel.add(upperPanel, BorderLayout.NORTH);
+        tabOnePanel.add(centrePanel, BorderLayout.CENTER);
+        tabOnePanel.add(lowerPanel, BorderLayout.SOUTH);
         mainInterface.addTab("Tab 1", tabOnePanel);
         mainInterface.addTab("Tab 2", tabTwoPanel);
 
@@ -145,6 +166,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
             public void stateChanged(ChangeEvent ent) {
                 print("SOMETHING HAPPENED");
             }
+            
+            
 
         });
 
