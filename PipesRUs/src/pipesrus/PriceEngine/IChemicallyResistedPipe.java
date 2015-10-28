@@ -9,7 +9,8 @@ package pipesrus.PriceEngine;
  *
  * @author UP738106
  */
-public interface ChemicallyResistedPipe 
+public interface IChemicallyResistedPipe 
 {
-    
+    public boolean getChemicalResistance();
+    public boolean setChemicalResistance(boolean resistance);
 }

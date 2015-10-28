@@ -5,22 +5,20 @@
  */
 package pipesrus.PriceEngine;
 
+import java.util.Set;
+
 /**
  *
- * @author UP738106
+ * @author Harry
  */
-public class PipesRUs 
+public enum enumPipeGrade 
 {
-
-  
-    public static void main(String[] args) 
-    {
-        
-        
-    }
+    ONE,
+    TWO,
+    THREE,    
+    FOUR,
+    FIVE;
     
+public enumPipeGrade grade;
+
 }
-
-
-//Test Comment 
-//sdfsd
