@@ -13,7 +13,9 @@ import javax.swing.event.*;
 
 /**
  *
- * @author pete
+ * @author Pete
+ * 
+ * 
  */
 public class PipesRUsGUI extends JFrame implements ActionListener {
 

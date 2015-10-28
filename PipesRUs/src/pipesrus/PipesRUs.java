@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package pipesrus.PriceEngine;
+package pipesrus;
 
 /**
  *
@@ -12,7 +12,6 @@ package pipesrus.PriceEngine;
 public class PipesRUs 
 {
 
-<<<<<<< HEAD:PipesRUs/src/pipesrus/PipesRUs.java
     /**
      * @param args the command line arguments
      */
@@ -21,12 +20,7 @@ public class PipesRUs
         PipesRUsGUI gui = new PipesRUsGUI(0.5);
         
         gui.setVisible(true);
-=======
-  
-    public static void main(String[] args) 
-    {
-        
->>>>>>> origin/PriceEngine:PipesRUs/src/pipesrus/PriceEngine/PipesRUs.java
-        
     }
+  
+
 }
