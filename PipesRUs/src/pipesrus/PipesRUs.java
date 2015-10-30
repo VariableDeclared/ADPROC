@@ -7,18 +7,20 @@ package pipesrus;
 
 /**
  *
- * @author pete
+ * @author UP738106
  */
-public class PipesRUs {
+public class PipesRUs 
+{
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         //Instiate the gui
-        PipesRUsGUI gui = new PipesRUsGUI(0.8);
+        PipesRUsGUI gui = new PipesRUsGUI(0.5);
         
         gui.setVisible(true);
-        
     }
+  
+
 }
