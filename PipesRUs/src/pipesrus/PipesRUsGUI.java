@@ -10,7 +10,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-
+import pipesrus.Models.*;
+import java.util.*;
 /**
  *
  * @author Pete
@@ -21,18 +22,27 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 
     private Dimension userWindow;
     private JTabbedPane mainInterface;
+    private HashMap<String, JComponent> components;
 
-    public PipesRUsGUI(double sizePercentage) {
+    public PipesRUsGUI()
+    {
+        super();
+        this.components = new HashMap<>();
         this.setTitle("Pipes R Us");
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
+        initMenuBar();
+        initInterface();
+       
+        this.setSize((int) Math.floor(userWindow.width * 0.8),
+                (int) Math.floor(userWindow.height * 0.8));
+    }
+    public PipesRUsGUI(double sizePercentage) {
+        this();
         //this.setLayout(new FlowLayout());
         this.setSize((int) Math.floor(userWindow.width * sizePercentage),
                 (int) Math.floor(userWindow.height * sizePercentage));
-        initMenuBar();
-        initInterface();
-
     }
 
     private void print(String value) {
@@ -58,7 +68,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 
     private JButton createAndReturnJButtonWithName(String name) {
         JButton newButton = new JButton(name);
-        newButton.addActionListener(this);
+        addDefaultActionListener(newButton);
         return newButton;
     }
 
@@ -75,7 +85,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 
     private JRadioButton createAndReturnJRadioButtonWithName(String name) {
         JRadioButton newButton = new JRadioButton(name);
-        addDefaultActionListener(newButton);;
+        addDefaultActionListener(newButton);
         return newButton;
     }
 
@@ -100,11 +110,25 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         this.setJMenuBar(mainMenu);
 
     }
+    public void tryUpdateModel()
+    {
+       Component [] comps = this.mainInterface.getComponents();
+       
+       for(Component comp : comps)
+       {
+           print(comp.getName());
+       }
+    }
 
+    public void add(String name, JComponent component)
+    {
+        super.add(component);
+        this.components.put(name, component);
+        
+    }
     private void initInterface() {
         //this.setLayout(new FlowLayout());
         mainInterface = new JTabbedPane();
-        //this.setLayout(new FlowLayout());
         JPanel tabOnePanel = new JPanel();
         JPanel tabTwoPanel = new JPanel();
         tabOnePanel.setLayout(new BorderLayout());
@@ -115,6 +139,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         //init panels
         // tabOnePanel.setLayout(new FlowLayout());
         lowerPanel.add(this.createAndReturnJButtonWithName("Go"));
+        
         ButtonGroup colourButtons = new ButtonGroup();
         
         //init colour buttons
@@ -171,7 +196,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 
         });
 
-        this.add(mainInterface);
-
+        this.add("mainInterface", mainInterface);
+        tryUpdateModel();
     }
 }

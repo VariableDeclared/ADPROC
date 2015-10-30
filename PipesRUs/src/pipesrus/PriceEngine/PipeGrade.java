@@ -10,8 +10,10 @@ import java.util.Set;
 /**
  *
  * @author Harry
+ * 
+ * @version 0.2 - Rename
  */
-public enum enumPipeGrade 
+public enum PipeGrade 
 {
     ONE,
     TWO,
@@ -19,6 +21,6 @@ public enum enumPipeGrade
     FOUR,
     FIVE;
     
-public enumPipeGrade grade;
+public PipeGrade grade;
 
 }

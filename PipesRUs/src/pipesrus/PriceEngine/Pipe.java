@@ -14,7 +14,7 @@ import java.util.HashSet;
 abstract public class Pipe implements IChemicallyResistedPipe
 {
     private float _price;
-    private enumPipeGrade _ePipeGrade;
+    private PipeGrade _ePipeGrade;
     private int _pipeType;
     
     private boolean chemicalResistance;
@@ -34,12 +34,12 @@ abstract public class Pipe implements IChemicallyResistedPipe
         
     }
     
-    public void setGrade(enumPipeGrade newGrade)
+    public void setGrade(PipeGrade newGrade)
     {
         this._ePipeGrade.grade = newGrade;
     }
     
-    public enumPipeGrade getGrade()
+    public PipeGrade getGrade()
     {
         return this._ePipeGrade.grade;
     }
