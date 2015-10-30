@@ -85,18 +85,21 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 
     private JRadioButton createAndReturnJRadioButtonWithName(String name) {
         JRadioButton newButton = new JRadioButton(name);
+        newButton.setName(name);
         addDefaultActionListener(newButton);
         return newButton;
     }
 
     private JMenuItem createMenuItemWithName(String name, ActionListener listener) {
         JMenuItem item = new JMenuItem(name);
+        item.setName(name);
         addDefaultActionListener(item);
         return item;
     }
 
     private JComponent createJToggleButtonWithName(String name) {
         JToggleButton newButton = new JToggleButton(name);
+        newButton.setName(name);
         addDefaultActionListener(newButton);
         return newButton;
     }
@@ -112,12 +115,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
     }
     public void tryUpdateModel()
     {
-       Component [] comps = this.mainInterface.getComponents();
        
-       for(Component comp : comps)
-       {
-           print(comp.getName());
-       }
+       
     }
 
     public void add(String name, JComponent component)
@@ -148,7 +147,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         JRadioButton noColour, oneColour, twoColour;
         noColour = this.createAndReturnJRadioButtonWithName("No colour");
         oneColour = this.createAndReturnJRadioButtonWithName("One colour");
-        twoColour = this.createAndReturnJRadioButtonWithName("Two colour");
+        twoColour = this.createAndReturnJRadioButtonWithName("Two colour");  
         colourGroup.add(noColour);
         colourGroup.add(oneColour);
         colourGroup.add(twoColour);
@@ -159,6 +158,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         //select no colour by default
         // do it here
         JTextField textBox = new JTextField("Enter grade here");
+        textBox.setName("Pipe Grade");
         textBox.setToolTipText("Put the grade (From 1-5) in here.");
         textBox.addFocusListener(new FocusListener() { 
                 public void focusGained(FocusEvent e)
