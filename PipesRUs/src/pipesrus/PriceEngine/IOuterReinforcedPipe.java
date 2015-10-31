@@ -7,10 +7,11 @@ package pipesrus.PriceEngine;
 
 /**
  *
- * @author UP738106
+ * @author Harry
  */
-public interface IChemicallyResistedPipe 
-{   
-    public boolean getChemicalResistance();
-    public void setChemicalResistance(boolean resistance);
+public interface IOuterReinforcedPipe
+{
+    
+    public void setOuterReinforcedBool(boolean reinforced);
+    public boolean getOuterReinforcedBool();
 }

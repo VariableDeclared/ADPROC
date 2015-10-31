@@ -9,16 +9,13 @@ import java.util.Set;
 
 /**
  *
- * @author Harry
+ * @author UP738106
  */
 public enum enumPipeGrade 
 {
-    ONE,
-    TWO,
-    THREE,    
-    FOUR,
-    FIVE;
-    
-public enumPipeGrade grade;
-
+    GRADE_ONE,
+    GRADE_TWO,
+    GRADE_THREE,    
+    GRADE_FOUR,
+    GRADE_FIVE;
 }

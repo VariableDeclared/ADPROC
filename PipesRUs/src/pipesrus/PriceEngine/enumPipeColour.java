@@ -9,8 +9,9 @@ package pipesrus.PriceEngine;
  *
  * @author UP738106
  */
-public interface IChemicallyResistedPipe 
-{   
-    public boolean getChemicalResistance();
-    public void setChemicalResistance(boolean resistance);
+public enum enumPipeColour 
+{
+    NO_COLOUR,
+    ONE_COLOUR,
+    TWO_COLOURS;
 }
