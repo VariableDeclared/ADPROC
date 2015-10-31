@@ -9,9 +9,13 @@ import pipesrus.PriceEngine.*;
  *
  * @author Pete
  */
-public class PipeModel {
+public class PipeModel extends Model {
     PipeGrade pipeGrade;
+    //PipeColour pipeColour;
     boolean insulated, reinforced, chemicalResistance;
+    /**
+     * Shouldn't be called by the system, only used so that the system can see methods
+     */
     public PipeModel()
     {
         
@@ -24,19 +28,23 @@ public class PipeModel {
         this.chemicalResistance = chemicalResistance;
         this.pipeGrade = grade;
     }
+//    public PipeColour getPipeColour()
+//    {
+//        return this.pipeColour;
+//    }
     public PipeGrade getPipeGrade()
     {
         return this.pipeGrade;
     }
-    public boolean getInsulated()
+    public Boolean getInsulated()
     {
         return this.insulated;
     }
-    public boolean getReinforced()
+    public Boolean getReinforced()
     {
         return this.reinforced;
     }
-    public boolean getChemicalResistance()
+    public Boolean getChemicalResistance()
     {
         return this.chemicalResistance;
     }

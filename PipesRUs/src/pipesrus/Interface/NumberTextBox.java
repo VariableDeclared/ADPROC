@@ -21,9 +21,21 @@ public class NumberTextBox extends JTextField {
      */
     public NumberTextBox(String value)
     {
-        this();
-        this.setName(value);
-        this.setText("1111111");
+        super(value);
+        /*little bit of a 'hack' as 'this' inside the anonymous 
+        /type refers to the anonymous type.*/
+        NumberTextBox ref = this;
+        this.addFocusListener(new FocusListener() {
+            public void focusGained(FocusEvent e) {
+                ref.selectAll();
+
+            }
+
+            public void focusLost(FocusEvent e) {
+                ref.select(0, 0);
+            }
+        });
+
         
     }
     public NumberTextBox() {

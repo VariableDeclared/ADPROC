@@ -13,36 +13,59 @@ import javax.swing.event.*;
 import pipesrus.Models.*;
 import java.util.*;
 import pipesrus.Interface.NumberTextBox;
+import java.lang.reflect.*;
+
 /**
  *
  * @author Pete
- * 
- * 
+ *
+ *
  */
+
+/*
+*   To do:
+*       Fix the labelling of combo box stuff
+*
+*/
 public class PipesRUsGUI extends JFrame implements ActionListener {
 
     private Dimension userWindow;
     private JTabbedPane mainInterface;
     private HashMap<String, JComponent> components;
+    private JPanel informationTab, paymentTab;
 
-    public PipesRUsGUI()
-    {
+    public PipesRUsGUI() {
+        
         super();
+        //*INITMENUBAR* must be called before altering other GUI stuff
+        initMenuBar();
         this.components = new HashMap<>();
+        this.informationTab = new JPanel();
+        this.paymentTab = new JPanel();
+        try{
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch(Exception ex)
+        {
+            swallowError(ex);
+        }
+        this.mainInterface = new JTabbedPane();
+        this.mainInterface.addTab("Information", this.informationTab);
+        this.mainInterface.addTab("Order Summary", this.paymentTab);
+        this.add(mainInterface);
         this.setTitle("Pipes R Us");
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        initMenuBar();
-        throw new UnsupportedOperationException("Not yet implemented");
-        initIterfaceWithModel(model);
+
+        //throw new UnsupportedOperationException("Not yet implemented");
+        initInterfaceWithModel(new PipeModel());
         //initInterface();
-       
+
         this.setSize((int) Math.floor(userWindow.width * 0.8),
                 (int) Math.floor(userWindow.height * 0.8));
     }
-    
-    
+
     public PipesRUsGUI(double sizePercentage) {
         this();
         //this.setLayout(new FlowLayout());
@@ -120,100 +143,157 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 
     }
 
-    public void tryUpdateModel(PipeModel pipe)
-    {
-        
-       
+    public void tryUpdateModel(PipeModel pipe) {
+
     }
-    private void swallowError(Exception ex)
-    {
+
+    private void swallowError(Exception ex) {
         //improve this at a later date.
         JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.OK_OPTION);
-        
+
     }
-    public void add(String name, JComponent component)
-    {
-        super.add(component);
-        this.components.put(name, component);
-        
-    }
-    private void initInterface() {
-        //this.setLayout(new FlowLayout());
-        mainInterface = new JTabbedPane();
-        JPanel tabOnePanel = new JPanel();
-        JPanel tabTwoPanel = new JPanel();
-        tabOnePanel.setLayout(new BorderLayout());
-        JPanel centrePanel = new JPanel();
-        JPanel lowerPanel = new JPanel();
-        JPanel upperPanel = new JPanel();
-        
-        //init panels
-        // tabOnePanel.setLayout(new FlowLayout());
-        lowerPanel.add(this.createAndReturnJButtonWithName("Go"));
-        
-        ButtonGroup colourButtons = new ButtonGroup();
-        
-        //init colour buttons
-        //JRadioButton noColour = this.createAndReturnJRadioButtonWithName("No colour");
-        ButtonGroup colourGroup = new ButtonGroup();
-        JRadioButton noColour, oneColour, twoColour;
-        noColour = this.createAndReturnJRadioButtonWithName("No colour");
-        oneColour = this.createAndReturnJRadioButtonWithName("One colour");
-        twoColour = this.createAndReturnJRadioButtonWithName("Two colour");  
-        colourGroup.add(noColour);
-        colourGroup.add(oneColour);
-        colourGroup.add(twoColour);
-        
-        
-        this.addToPanel(centrePanel,
-                new AbstractButton[]{noColour, oneColour, twoColour});
+//
+//    public void add(String name, JComponent component) {
+//        super.add(component);
+//        this.components.put(name, component);
+//
+//    }
+    //needs to be fixed
+//    private void initInterface() {
+//        //this.setLayout(new FlowLayout());
+//        
+//       
+//        tabOnePanel.setLayout(new BorderLayout());
+//        JPanel centrePanel = new JPanel();
+//        JPanel lowerPanel = new JPanel();
+//        JPanel upperPanel = new JPanel();
+//
+//        //init panels
+//        // tabOnePanel.setLayout(new FlowLayout());
+//        lowerPanel.add(this.createAndReturnJButtonWithName("Go"));
+//
+//        ButtonGroup colourButtons = new ButtonGroup();
+//
+//        //init colour buttons
+//        //JRadioButton noColour = this.createAndReturnJRadioButtonWithName("No colour");
+//        ButtonGroup colourGroup = new ButtonGroup();
+//        JRadioButton noColour, oneColour, twoColour;
+//        noColour = this.createAndReturnJRadioButtonWithName("No colour");
+//        oneColour = this.createAndReturnJRadioButtonWithName("One colour");
+//        twoColour = this.createAndReturnJRadioButtonWithName("Two colour");
+//        colourGroup.add(noColour);
+//        colourGroup.add(oneColour);
+//        colourGroup.add(twoColour);
+//
+//        this.addToPanel(centrePanel,
+//                new AbstractButton[]{noColour, oneColour, twoColour});
+//
+//        //select no colour by default
+//        // do it here
+//        NumberTextBox textBox = new NumberTextBox("Enter grade here");
+//        textBox.setName("Pipe Grade");
+//
+//        textBox.setToolTipText("Put the grade (From 1-5) in here.");
+//        textBox.addFocusListener(new FocusListener() {
+//            public void focusGained(FocusEvent e) {
+//                textBox.selectAll();
+//
+//            }
+//
+//            public void focusLost(FocusEvent e) {
+//                textBox.select(0, 0);
+//            }
+//        });
+//        textBox.addActionListener(this);
+//        this.components.put("Pipe grade", textBox);
+//        centrePanel.add(textBox);
+//
+//        centrePanel.add(createJToggleButtonWithName("Inner Insulation"));
+//
+//        centrePanel.add(createJToggleButtonWithName("Outer reinforcement"));
+//
+//        centrePanel.add(createJToggleButtonWithName("Chemical Resistance"));
+//
+//        tabOnePanel.add(upperPanel, BorderLayout.NORTH);
+//        tabOnePanel.add(centrePanel, BorderLayout.CENTER);
+//        tabOnePanel.add(lowerPanel, BorderLayout.SOUTH);
+//        mainInterface.addTab("Tab 1", tabOnePanel);
+//        mainInterface.addTab("Tab 2", tabTwoPanel);
+//
+//        mainInterface.addChangeListener(new ChangeListener() {
+//            public void stateChanged(ChangeEvent ent) {
+//                print("SOMETHING HAPPENED");
+//            }
+//
+//        });
+//
+//        this.add("mainInterface", mainInterface);
+//
+//        tryUpdateModel(new PipeModel());
+//    }
+//    
 
-        //select no colour by default
-        // do it here
-        NumberTextBox textBox = new NumberTextBox("Enter grade here");
-        textBox.setName("Pipe Grade");
-        
-        textBox.setToolTipText("Put the grade (From 1-5) in here.");
-        textBox.addFocusListener(new FocusListener() { 
-                public void focusGained(FocusEvent e)
-                {
-                    textBox.selectAll();
-                    
-                }
-                
-                public void focusLost(FocusEvent e)
-                {
-                    textBox.select(0, 0);
-                }
-        });
-        textBox.addActionListener(this);
-        this.components.put("Pipe grade", textBox);
-        centrePanel.add(textBox);
-        
-        centrePanel.add(createJToggleButtonWithName("Inner Insulation"));
-
-        centrePanel.add(createJToggleButtonWithName("Outer reinforcement"));
-
-        centrePanel.add(createJToggleButtonWithName("Chemical Resistance"));
-
-        tabOnePanel.add(upperPanel, BorderLayout.NORTH);
-        tabOnePanel.add(centrePanel, BorderLayout.CENTER);
-        tabOnePanel.add(lowerPanel, BorderLayout.SOUTH);
-        mainInterface.addTab("Tab 1", tabOnePanel);
-        mainInterface.addTab("Tab 2", tabTwoPanel);
-
-        mainInterface.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent ent) {
-                print("SOMETHING HAPPENED");
+    private String parseWords(String toParse) {
+        toParse = toParse.replace("get", "");
+        StringBuilder returnString = new StringBuilder();
+        for (char c : toParse.toCharArray()) {
+            String sqChar = new String(new char[]{c});
+            if (sqChar.equals(sqChar.toUpperCase()) && toParse.indexOf(c) != 0) {
+                returnString.append(" ");
+                returnString.append(sqChar);
+            } else {
+                returnString.append(c);
             }
-            
-            
-
-        });
-
-        this.add("mainInterface", mainInterface);
-        
-        
-        tryUpdateModel(new PipeModel());
+        }
+        return returnString.toString();
     }
+
+    /**
+     * Initialize the interface with the model and it's types.
+     *
+     * @param model
+     */
+    //This uses reflection.
+    private void initInterfaceWithModel(Model model) {
+        try {
+
+            ButtonGroup buttonGroup = new ButtonGroup();
+            Class<?> specificModel = Class.forName(model.getClass().getName());
+            
+            Method[] members = specificModel.getMethods();
+            JComponent newComponent = null;
+            for (Method member : members) {
+                String memberHumanName = parseWords(member.getName());
+                Class<?> memberType = member.getReturnType();
+
+                //if type is boolean then create a RadioButton, grouped.
+                if (memberType.getTypeName().equals(Boolean.class.getTypeName())) {
+                    newComponent = new JRadioButton(memberHumanName);
+                    buttonGroup.add((JRadioButton) newComponent);
+                } //if enum then just create a textbox.
+                if (memberType.isEnum()) {
+                    JPanel enclosingPanel = new JPanel();
+                    enclosingPanel.add(new JLabel(member.getName()));
+                    
+                    Object[] eMembers = memberType.getEnumConstants();
+                    newComponent = new JComboBox(eMembers);
+                    enclosingPanel.add(newComponent);
+
+                } else if (memberType.getTypeName().equals(String.class.getName())
+                        && !member.getName().equals("toString")) {
+                    newComponent = new JTextField(memberHumanName);
+
+                }
+                if(newComponent != null)
+                    this.informationTab.add(newComponent);
+            }
+
+        } catch (ClassNotFoundException ex) {
+            swallowError(ex);
+        } catch (Exception ex) {
+            swallowError(ex);
+        }
+
+    }
+
 }
