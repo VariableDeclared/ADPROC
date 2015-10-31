@@ -12,6 +12,10 @@ import pipesrus.PriceEngine.*;
 public class PipeModel {
     PipeGrade pipeGrade;
     boolean insulated, reinforced, chemicalResistance;
+    public PipeModel()
+    {
+        
+    }
     public PipeModel(boolean insulated, boolean reinforced, boolean chemicalResistance,
                         PipeGrade grade)
     {

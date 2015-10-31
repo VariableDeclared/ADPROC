@@ -23,11 +23,13 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
     private Dimension userWindow;
     private JTabbedPane mainInterface;
     private HashMap<String, JComponent> components;
+    private JDialog interfaceDialog;
 
     public PipesRUsGUI()
     {
         super();
         this.components = new HashMap<>();
+        this.interfaceDialog = new JDialog(this, "", true);
         this.setTitle("Pipes R Us");
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -74,6 +76,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 
     private void addToPanel(JPanel panel, AbstractButton[] items) {
         for (AbstractButton button : items) {
+            this.components.put("Radio button " + button.getText(), button);
             panel.add(button);
         }
     }
@@ -113,12 +116,40 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         this.setJMenuBar(mainMenu);
 
     }
-    public void tryUpdateModel()
+    public JPanel [] processPanels()
     {
+        JPanel[] panels = new JPanel[this.mainInterface.getComponents().length];
+        
+        //continue
+    }
+    public void tryUpdateModel(PipeModel pipe)
+    {
+       try{
+         JPanel [] panels = (JPanel []) this.mainInterface.getComponents();
+          // print(this.mainInterface.getComponent(0).getClass().toString())
+         JComponent [] inputComponents  = (JComponent []) panels[0].getComponents();
+
+         for(JComponent component : inputComponents)
+         {
+             if(component.getClass().equals(JButton.class))
+             {
+                 print("Found a JButton");
+             }
+         }
        
+       }
+       catch(ClassCastException ex)
+       {
+           swollowError(ex);
+       }
        
     }
-
+    private void swollowError(Exception ex)
+    {
+        //improve this at a later date.
+        JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.OK_OPTION);
+        
+    }
     public void add(String name, JComponent component)
     {
         super.add(component);
@@ -152,6 +183,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         colourGroup.add(oneColour);
         colourGroup.add(twoColour);
         
+        
         this.addToPanel(centrePanel,
                 new AbstractButton[]{noColour, oneColour, twoColour});
 
@@ -159,6 +191,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         // do it here
         JTextField textBox = new JTextField("Enter grade here");
         textBox.setName("Pipe Grade");
+        
         textBox.setToolTipText("Put the grade (From 1-5) in here.");
         textBox.addFocusListener(new FocusListener() { 
                 public void focusGained(FocusEvent e)
@@ -173,8 +206,9 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
                 }
         });
         textBox.addActionListener(this);
+        this.components.put("Pipe grade", textBox);
         centrePanel.add(textBox);
-
+        
         centrePanel.add(createJToggleButtonWithName("Inner Insulation"));
 
         centrePanel.add(createJToggleButtonWithName("Outer reinforcement"));
@@ -197,6 +231,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         });
 
         this.add("mainInterface", mainInterface);
-        tryUpdateModel();
+        
+        
+        tryUpdateModel(new PipeModel());
     }
 }
