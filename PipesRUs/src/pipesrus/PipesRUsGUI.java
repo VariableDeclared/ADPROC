@@ -12,6 +12,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 import pipesrus.Models.*;
 import java.util.*;
+import pipesrus.Interface.NumberTextBox;
 /**
  *
  * @author Pete
@@ -23,23 +24,25 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
     private Dimension userWindow;
     private JTabbedPane mainInterface;
     private HashMap<String, JComponent> components;
-    private JDialog interfaceDialog;
 
     public PipesRUsGUI()
     {
         super();
         this.components = new HashMap<>();
-        this.interfaceDialog = new JDialog(this, "", true);
         this.setTitle("Pipes R Us");
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         initMenuBar();
-        initInterface();
+        throw new UnsupportedOperationException("Not yet implemented");
+        initIterfaceWithModel(model);
+        //initInterface();
        
         this.setSize((int) Math.floor(userWindow.width * 0.8),
                 (int) Math.floor(userWindow.height * 0.8));
     }
+    
+    
     public PipesRUsGUI(double sizePercentage) {
         this();
         //this.setLayout(new FlowLayout());
@@ -116,35 +119,13 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         this.setJMenuBar(mainMenu);
 
     }
-    public JPanel [] processPanels()
-    {
-        JPanel[] panels = new JPanel[this.mainInterface.getComponents().length];
-        
-        //continue
-    }
+
     public void tryUpdateModel(PipeModel pipe)
     {
-       try{
-         JPanel [] panels = (JPanel []) this.mainInterface.getComponents();
-          // print(this.mainInterface.getComponent(0).getClass().toString())
-         JComponent [] inputComponents  = (JComponent []) panels[0].getComponents();
-
-         for(JComponent component : inputComponents)
-         {
-             if(component.getClass().equals(JButton.class))
-             {
-                 print("Found a JButton");
-             }
-         }
-       
-       }
-       catch(ClassCastException ex)
-       {
-           swollowError(ex);
-       }
+        
        
     }
-    private void swollowError(Exception ex)
+    private void swallowError(Exception ex)
     {
         //improve this at a later date.
         JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.OK_OPTION);
@@ -189,7 +170,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 
         //select no colour by default
         // do it here
-        JTextField textBox = new JTextField("Enter grade here");
+        NumberTextBox textBox = new NumberTextBox("Enter grade here");
         textBox.setName("Pipe Grade");
         
         textBox.setToolTipText("Put the grade (From 1-5) in here.");
