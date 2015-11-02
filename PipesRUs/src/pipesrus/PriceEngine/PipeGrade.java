@@ -8,9 +8,9 @@ package pipesrus.PriceEngine;
 import java.util.Set;
 
 /**
- *
- * @author Harry
  * 
+ * 
+ * @author UP738106
  * @version 0.2 - Rename
  */
 public enum PipeGrade 
@@ -20,7 +20,15 @@ public enum PipeGrade
     THREE,    
     FOUR,
     FIVE;
-    
-public PipeGrade grade;
 
 }
+//public PipeGrade grade;
+//{
+//
+//    GRADE_ONE,
+//    GRADE_TWO,
+//    GRADE_THREE,    
+//    GRADE_FOUR,
+//    GRADE_FIVE;
+//
+//}

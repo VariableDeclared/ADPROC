@@ -9,15 +9,20 @@ import java.util.HashSet;
 
 /**
  *
- * @author Harry
+ * @author UP738106
  */
 abstract public class Pipe implements IChemicallyResistedPipe
 {
     private float _price;
+
     private PipeGrade _ePipeGrade;
+
+
+    private PipeColour _ePipeColour;
+
     private int _pipeType;
     
-    private boolean chemicalResistance;
+    private boolean chemicalResistance;   
 
     public Pipe()
     {  
@@ -36,12 +41,12 @@ abstract public class Pipe implements IChemicallyResistedPipe
     
     public void setGrade(PipeGrade newGrade)
     {
-        this._ePipeGrade.grade = newGrade;
+        this._ePipeGrade = newGrade;
     }
     
     public PipeGrade getGrade()
     {
-        return this._ePipeGrade.grade;
+        return this._ePipeGrade;
     }
     
     public int getType()
@@ -55,5 +60,13 @@ abstract public class Pipe implements IChemicallyResistedPipe
         this._pipeType = newType;
     }
     
+    public boolean getChemicalResistance()
+    {
+        return this.chemicalResistance;
+    }
     
+    public void setChemicalResistance(boolean chemRes)
+    {
+        this.chemicalResistance = chemRes;
+    }
 }

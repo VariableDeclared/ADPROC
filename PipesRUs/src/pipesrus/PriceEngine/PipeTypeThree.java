@@ -9,8 +9,10 @@ package pipesrus.PriceEngine;
  *
  * @author UP738106
  */
-public interface IChemicallyResistedPipe 
-{   
-    public boolean getChemicalResistance();
-    public void setChemicalResistance(boolean resistance);
+public class PipeTypeThree extends PipeTypeTwo
+{
+    public PipeTypeThree(PipeColour colour, boolean chemResist)
+    {
+        super(colour, chemResist);
+    }
 }
