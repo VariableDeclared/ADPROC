@@ -14,19 +14,20 @@ import pipesrus.Models.*;
 import java.util.*;
 import pipesrus.Interface.NumberTextBox;
 import java.lang.reflect.*;
+import pipesrus.PriceEngine.*;
 
 /**
  *
- * @author Pete
+ * @author UP732011
  *
  *
  */
 
 /*
-*   To do:
-*       Fix the labelling of combo box stuff
-*
-*/
+ *   To do:
+ *       Fix the labelling of combo box stuff
+ *
+ */
 public class PipesRUsGUI extends JFrame implements ActionListener {
 
     private Dimension userWindow;
@@ -35,18 +36,16 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
     private JPanel informationTab, paymentTab;
 
     public PipesRUsGUI() {
-        
+
         super();
         //*INITMENUBAR* must be called before altering other GUI stuff
         initMenuBar();
         this.components = new HashMap<>();
         this.informationTab = new JPanel();
         this.paymentTab = new JPanel();
-        try{
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }
-        catch(Exception ex)
-        {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ex) {
             swallowError(ex);
         }
         this.mainInterface = new JTabbedPane();
@@ -59,11 +58,13 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         this.setResizable(false);
 
         //throw new UnsupportedOperationException("Not yet implemented");
-        initInterfaceWithModel(new PipeModel());
+        initInformationScreenWithModel(new PipeModel());
+        initOrderScreen();
         //initInterface();
 
         this.setSize((int) Math.floor(userWindow.width * 0.8),
                 (int) Math.floor(userWindow.height * 0.8));
+
     }
 
     public PipesRUsGUI(double sizePercentage) {
@@ -89,6 +90,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
                 //terminate gracefully
                 System.exit(0);
                 break;
+            case "Go":
+                throw new UnsupportedOperationException();
             default:
                 break;
         }
@@ -143,8 +146,32 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 
     }
 
-    public void tryUpdateModel(PipeModel pipe) {
+    private Boolean evaluateAsRadioButton(String key) {
+        return ((JRadioButton) this.components.get(key)).isSelected();
+    }
 
+    private String evaluateAsComboBox(String key) {
+        return ((JComboBox) this.components.get(key)).getSelectedItem().toString();
+    }
+
+    public void tryUpdateModel(PipeModel pipe) {
+        PipeColour colour = PipeColour.valueOf(evaluateAsComboBox("Pipe Colour"));
+        PipeGrade grade = PipeGrade.valueOf(evaluateAsComboBox("Pipe Grade"));
+        Boolean chemicalResistance = evaluateAsRadioButton("Chemical Resistance");
+        Boolean insulated = evaluateAsRadioButton("Insulated");
+        Boolean reinforced = evaluateAsRadioButton("Reinforced");
+
+        pipe = new PipeModel(insulated, reinforced, chemicalResistance,
+                grade, colour);
+
+    }
+
+    public void acceptOrderModel(OrderModel model) {
+        this.mainInterface.setSelectedIndex(1);
+        JTextArea information = (JTextArea) this.paymentTab.getComponent(0);
+        information.setText("--------------------");
+
+        throw new UnsupportedOperationException();
     }
 
     private void swallowError(Exception ex) {
@@ -235,6 +262,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 
     private String parseWords(String toParse) {
         toParse = toParse.replace("get", "");
+        toParse = toParse.replace("_", " ");
         StringBuilder returnString = new StringBuilder();
         for (char c : toParse.toCharArray()) {
             String sqChar = new String(new char[]{c});
@@ -248,18 +276,25 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         return returnString.toString();
     }
 
+    private void initOrderScreen() {
+        JTextArea informationScreen = new JTextArea();
+        this.paymentTab.add(informationScreen);
+        informationScreen.setText("Order not yet completed");
+
+    }
+
     /**
      * Initialize the interface with the model and it's types.
      *
      * @param model
      */
     //This uses reflection.
-    private void initInterfaceWithModel(Model model) {
+    private void initInformationScreenWithModel(Model model) {
         try {
 
             ButtonGroup buttonGroup = new ButtonGroup();
             Class<?> specificModel = Class.forName(model.getClass().getName());
-            
+
             Method[] members = specificModel.getMethods();
             JComponent newComponent = null;
             for (Method member : members) {
@@ -274,7 +309,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
                 if (memberType.isEnum()) {
                     JPanel enclosingPanel = new JPanel();
                     enclosingPanel.add(new JLabel(member.getName()));
-                    
+
                     Object[] eMembers = memberType.getEnumConstants();
                     newComponent = new JComboBox(eMembers);
                     enclosingPanel.add(newComponent);
@@ -284,8 +319,11 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
                     newComponent = new JTextField(memberHumanName);
 
                 }
-                if(newComponent != null)
+                if (newComponent != null) {
                     this.informationTab.add(newComponent);
+                    this.components.put(memberHumanName, newComponent);
+                }
+
             }
 
         } catch (ClassNotFoundException ex) {
@@ -293,7 +331,9 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         } catch (Exception ex) {
             swallowError(ex);
         }
-
+        JButton go = new JButton("Go");
+        go.addActionListener(this);
+        this.informationTab.add(go);
     }
 
 }

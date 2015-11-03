@@ -14,7 +14,7 @@ import org.junit.runners.Suite;
 
 /**
  *
- * @author pete
+ * @author UP732011
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({pipesrus.Interface.NumberTextBoxTest.class})

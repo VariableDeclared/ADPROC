@@ -11,7 +11,7 @@ import java.beans.*;
 
 /**
  *  Simple text box that replaces non-numeric chars with 1.
- * @author pete
+ * @author UP732011
  */
 public class NumberTextBox extends JTextField {
     

@@ -16,7 +16,7 @@ import pipesrus.Models.PipeModel;
 
 /**
  *
- * @author pete
+ * @author UP732011
  */
 public class PipesRUsGUITest {
     

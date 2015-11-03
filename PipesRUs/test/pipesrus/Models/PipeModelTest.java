@@ -15,7 +15,7 @@ import pipesrus.PriceEngine.PipeGrade;
 
 /**
  *
- * @author pete
+ * @author UP732011
  */
 public class PipeModelTest {
     

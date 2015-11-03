@@ -7,11 +7,11 @@ package pipesrus.Models;
 import pipesrus.PriceEngine.*;
 /**
  *
- * @author Pete
+ * @author UP732011
  */
 public class PipeModel extends Model {
     PipeGrade pipeGrade;
-    //PipeColour pipeColour;
+    PipeColour pipeColour;
     boolean insulated, reinforced, chemicalResistance;
     /**
      * Shouldn't be called by the system, only used so that the system can see methods
@@ -20,18 +20,27 @@ public class PipeModel extends Model {
     {
         
     }
+    /**
+     * 
+     * @param insulated The insulation - boolean
+     * @param reinforced Reinforced - boolean
+     * @param chemicalResistance Chemical Resistance - boolean
+     * @param grade Chemical Resistance - enum
+     * @param colour Chemical Resistance - enum
+     */
     public PipeModel(boolean insulated, boolean reinforced, boolean chemicalResistance,
-                        PipeGrade grade)
+                        PipeGrade grade, PipeColour colour)
     {
         this.insulated = insulated;
         this.reinforced = reinforced;
         this.chemicalResistance = chemicalResistance;
         this.pipeGrade = grade;
+        this.pipeColour = colour;
     }
-//    public PipeColour getPipeColour()
-//    {
-//        return this.pipeColour;
-//    }
+    public PipeColour getPipeColour()
+    {
+        return this.pipeColour;
+    }
     public PipeGrade getPipeGrade()
     {
         return this.pipeGrade;
