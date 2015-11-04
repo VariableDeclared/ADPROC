@@ -26,7 +26,7 @@ public class PriceEngineSuite {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
-    }
+    }   
 
     @Before
     public void setUp() throws Exception {
