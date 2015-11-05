@@ -171,13 +171,17 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
         JTextArea information = (JTextArea) this.paymentTab.getComponent(0);
         information.setText("--------------------");
 
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     private void swallowError(Exception ex) {
         //improve this at a later date.
         JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.OK_OPTION);
 
+    }
+    private void swallowError(Exception ex, String title)
+    {
+        JOptionPane.showMessageDialog(this, ex.getMessage(), title, JOptionPane.OK_OPTION);
     }
 //
 //    public void add(String name, JComponent component) {
@@ -259,7 +263,10 @@ public class PipesRUsGUI extends JFrame implements ActionListener {
 //        tryUpdateModel(new PipeModel());
 //    }
 //    
-
+    public void showError(String errorTitle, Exception ex)
+    {
+        swallowError(ex, errorTitle);
+    }
     private String parseWords(String toParse) {
         toParse = toParse.replace("get", "");
         toParse = toParse.replace("_", " ");
