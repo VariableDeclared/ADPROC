@@ -11,12 +11,11 @@ package pipesrus.PriceEngine;
  */
 public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
 {
-    private boolean insulated;
+    private boolean insulated = true;
     
     public PipeTypeFour(PipeColour colour, boolean chemResist)
     {
-        super(colour, chemResist);  
-       
+        super(PipeColour.TWO_COLOURS, chemResist);  
     }
     
     public boolean getInsulatedBool()

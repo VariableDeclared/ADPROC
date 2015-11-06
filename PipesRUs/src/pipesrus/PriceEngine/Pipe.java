@@ -17,7 +17,6 @@ abstract public class Pipe implements IChemicallyResistedPipe
 
     private PipeGrade _ePipeGrade;
 
-
     private PipeColour _ePipeColour;
 
     private int _pipeType;

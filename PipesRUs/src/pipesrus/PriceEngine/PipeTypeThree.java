@@ -13,6 +13,6 @@ public class PipeTypeThree extends PipeTypeTwo
 {
     public PipeTypeThree(PipeColour colour, boolean chemResist)
     {
-        super(colour, chemResist);
+        super(PipeColour.TWO_COLOURS, chemResist);
     }
 }
