@@ -8,10 +8,24 @@ package pipesrus.PriceEngine;
 /**
  *
  * @author UP738106
+ * 
+ * @v0.2 - % cost for each Enum
  */
 public enum PipeColour 
 {
-    NO_COLOUR,
-    ONE_COLOUR,
-    TWO_COLOURS;
+    NO_COLOUR(0),
+    ONE_COLOUR(1.12),
+    TWO_COLOURS(1.17);
+    
+    
+    private double value;
+    private  PipeColour(double price)
+    {
+     this.value = price; 
+    }
+    
+    private double getValue()
+    {
+        return this.value;
+    }
 }
