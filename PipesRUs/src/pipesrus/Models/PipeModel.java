@@ -13,6 +13,7 @@ public class PipeModel extends Model {
     PipeGrade pipeGrade;
     PipeColour pipeColour;
     boolean insulated, reinforced, chemicalResistance;
+    float length, diameter;
     /**
      * Shouldn't be called by the system, only used so that the system can see methods
      */
@@ -27,15 +28,23 @@ public class PipeModel extends Model {
      * @param chemicalResistance Chemical Resistance - boolean
      * @param grade Chemical Resistance - enum
      * @param colour Chemical Resistance - enum
+     * @param length The length of the pipe in meters
+     * @param diameter the diameter of the pipe
      */
-    public PipeModel(boolean insulated, boolean reinforced, boolean chemicalResistance,
-                        PipeGrade grade, PipeColour colour)
+    public PipeModel(boolean insulated, boolean reinforced,
+            boolean chemicalResistance,
+                        PipeGrade grade, 
+                        PipeColour colour,
+                        float length,
+                        float diameter)
     {
         this.insulated = insulated;
         this.reinforced = reinforced;
         this.chemicalResistance = chemicalResistance;
         this.pipeGrade = grade;
         this.pipeColour = colour;
+        this.length = length;
+        this.diameter = diameter;
     }
     public PipeColour getPipeColour()
     {
@@ -56,6 +65,14 @@ public class PipeModel extends Model {
     public Boolean getChemicalResistance()
     {
         return this.chemicalResistance;
+    }
+    public Float getLength()
+    {
+        return this.length;
+    }
+    public Float getDiameter()
+    {
+        return this.diameter;
     }
     
 }

@@ -13,24 +13,31 @@ import java.util.HashSet;
  */
 abstract public class Pipe implements IChemicallyResistedPipe
 {
+    private static final double METERSPERINCH  =  0.0254;
+    
     private float _price;
 
-    private PipeGrade _ePipeGrade;
+    protected PipeGrade _ePipeGrade;
 
-    private PipeColour _ePipeColour;
+    //private PipeColour _ePipeColour;
 
     private int _pipeType;
     
     private boolean chemicalResistance;   
 
-    public Pipe()
-    {  
+    private float length, diameter;
+    public Pipe(float length, float diameter, PipeGrade grade, boolean chemResist)
+    {
+        this._ePipeGrade = grade;
+        this.chemicalResistance = chemResist;
+        this.length = length;
+        this.diameter = diameter;
     }
     
-    public float getPrice()
-    {
-    return this._price;
-    }
+    public abstract double getPrice();
+//    {
+//    return this._price;
+//    }
     
     public void setPrice(float newPrice)
     {
@@ -38,32 +45,44 @@ abstract public class Pipe implements IChemicallyResistedPipe
         
     }
     
-    public void setGrade(PipeGrade newGrade)
-    {
-        this._ePipeGrade = newGrade;
-    }
+//    public void setGrade(PipeGrade newGrade)
+//    {
+//        this._ePipeGrade = newGrade;
+//    }
     
     public PipeGrade getGrade()
     {
         return this._ePipeGrade;
     }
-    
+//    
     public int getType()
     {
         return this._pipeType;
     }
     
     
-    public void setType(int newType)
+//    public void setType(int newType)
+//    {
+//        this._pipeType = newType;
+//    }
+//    
+    
+    private double meterToInch(float m)
     {
-        this._pipeType = newType;
+        return m/METERSPERINCH;
     }
     
+    public double getVolume()
+    {
+        return (Math.PI*Math.pow(this.diameter/2, 2))*this.length;
+    }
+    
+    @Override
     public boolean getChemicalResistance()
     {
         return this.chemicalResistance;
     }
-    
+    @Override
     public void setChemicalResistance(boolean chemRes)
     {
         this.chemicalResistance = chemRes;

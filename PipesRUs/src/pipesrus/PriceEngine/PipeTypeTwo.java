@@ -11,8 +11,17 @@ package pipesrus.PriceEngine;
  */
 public class PipeTypeTwo extends PipeTypeOne
 {
-    public PipeTypeTwo(PipeColour colour, boolean chemResist)
+    public PipeTypeTwo(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
-        super(PipeColour.ONE_COLOUR, chemResist);
+        super(length, diameter,grade, chemResist);
+    }
+    @Override
+    public double getPrice()
+    {
+        double price = super.getPrice();
+        //colour
+        price *= 1.12;
+        
+        return price;
     }
 }

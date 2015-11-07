@@ -13,9 +13,9 @@ public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
 {
     private boolean insulated = true;
     
-    public PipeTypeFour(PipeColour colour, boolean chemResist)
+    public PipeTypeFour(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
-        super(PipeColour.TWO_COLOURS, chemResist);  
+        super(length, diameter,grade, chemResist);
     }
     
     public boolean getInsulatedBool()
@@ -26,6 +26,17 @@ public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
     public void setInsulatedBool(boolean reinforced)
     {
         this.insulated = reinforced;
+    }
+    
+    @Override
+    public double getPrice()
+    {
+        double price = super.getPrice();
+        
+        
+        //insulation
+        price *= 1.14;
+        return price;
     }
     
     

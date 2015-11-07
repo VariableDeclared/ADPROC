@@ -12,8 +12,8 @@ import pipesrus.PriceEngine.*;
 public class OrderModel {
     private final Pipe pipe;
     private final double totalCost;
-    private final int totalPipe;
-    public OrderModel(Pipe pipe, double totalCost, int totalPipe)
+    private final double totalPipe;
+    public OrderModel(Pipe pipe, double totalCost, double totalPipe)
     {
         this.pipe = pipe;
         this.totalCost = totalCost;
@@ -23,7 +23,7 @@ public class OrderModel {
     {
         return this.pipe;
     }
-    public int getTotalPipe()
+    public double getTotalPipe()
     {
         return this.totalPipe;
     }

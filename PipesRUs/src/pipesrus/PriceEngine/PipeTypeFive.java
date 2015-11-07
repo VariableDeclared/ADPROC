@@ -14,9 +14,9 @@ public class PipeTypeFive extends PipeTypeFour implements IOuterReinforcedPipe
 {
     private boolean outerReinforced = true;
         
-    public PipeTypeFive(PipeColour colour, boolean chemResist)
+    public PipeTypeFive(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
-        super(PipeColour.TWO_COLOURS, chemResist);
+        super(length, diameter, grade, chemResist);
     }
     
     public void setOuterReinforcedBool(boolean reinforcedBool)
@@ -29,4 +29,17 @@ public class PipeTypeFive extends PipeTypeFour implements IOuterReinforcedPipe
         return this.outerReinforced;
     }
     
+    @Override
+    public double getPrice()
+    {
+        double price = super.getPrice();
+        
+        //outer reinforcement
+        price *= 1.15;
+        
+        return price;
+        
+        
+        
+    }
 }
