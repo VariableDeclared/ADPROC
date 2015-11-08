@@ -14,15 +14,16 @@ import java.util.Set;
  */
 public class PipeTypeOne extends Pipe implements IColouredPipe 
 {
-   
+    protected PipeColour colour;
     public PipeTypeOne(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter, grade, chemResist);
+        this.colour = PipeColour.NO_COLOUR;
     }
-    
+    @Override
     public PipeColour getPipeColour()
     {
-        return PipeColour.NO_COLOUR;
+        return this.colour;
     }
 
     public double getPrice()

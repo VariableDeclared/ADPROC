@@ -15,7 +15,7 @@ abstract public class Pipe implements IChemicallyResistedPipe
 {
     private static final double METERSPERINCH  =  0.0254;
     
-    private float _price;
+    //private float _price;
 
     protected PipeGrade _ePipeGrade;
 
@@ -25,7 +25,7 @@ abstract public class Pipe implements IChemicallyResistedPipe
     
     private boolean chemicalResistance;   
 
-    private float length, diameter;
+    private final float length, diameter;
     public Pipe(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
         this._ePipeGrade = grade;
@@ -38,12 +38,12 @@ abstract public class Pipe implements IChemicallyResistedPipe
 //    {
 //    return this._price;
 //    }
-    
-    public void setPrice(float newPrice)
-    {
-        this._price = newPrice;
-        
-    }
+//    
+//    public void setPrice(float newPrice)
+//    {
+//        this._price = newPrice;
+//        
+//    }
     
 //    public void setGrade(PipeGrade newGrade)
 //    {

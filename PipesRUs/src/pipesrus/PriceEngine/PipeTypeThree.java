@@ -14,6 +14,7 @@ public class PipeTypeThree extends PipeTypeTwo
     public PipeTypeThree(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter,grade, chemResist);
+        this.colour = PipeColour.TWO_COLOURS;
     }
 
     @Override
