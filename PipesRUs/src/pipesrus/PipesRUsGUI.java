@@ -28,8 +28,8 @@ import pipesrus.PriceEngine.*;
  *       Fix the labelling of combo box stuff
  *
  */
-public class PipesRUsGUI extends JFrame implements ActionListener, 
-        QuoteReciever, 
+public class PipesRUsGUI extends JFrame implements ActionListener,
+        QuoteReciever,
         KeyListener {
 
     private Dimension userWindow;
@@ -84,72 +84,69 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private void print(String value) {
         System.out.println(value);
     }
+
     @Override
-    public void keyReleased(KeyEvent e)
-    {
+    public void keyReleased(KeyEvent e) {
         processKey(e);
     }
-    private void processKey(KeyEvent e)
-    {
+
+    private void processKey(KeyEvent e) {
         JTextField source = (JTextField) e.getSource();
-        try{
+        try {
             Float test = Float.valueOf(source.getText());
             System.out.println(test);
-        }
-        catch(Exception ex)
-        {
+        } catch (Exception ex) {
             System.out.println("except");
             this.components.get("Go").setEnabled(false);
         }
-        if(source.getText().isEmpty())
+        if (source.getText().isEmpty()) {
             this.components.get("Go").setEnabled(false);
-        else
+        } else {
             this.components.get("Go").setEnabled(true);
-        
+        }
+
     }
+
     @Override
-    public void keyTyped(KeyEvent e)
-    {   
+    public void keyTyped(KeyEvent e) {
         processKey(e);
     }
+
     @Override
-    public void keyPressed(KeyEvent e)
-    {   
+    public void keyPressed(KeyEvent e) {
         processKey(e);
     }
+
     /**
      *
      * @param evnt
      */
     @Override
     public synchronized void actionPerformed(ActionEvent evnt) {
-        try{
-        //main event handler
-        switch (evnt.getActionCommand()) {
-            case "Exit":
-                //terminate gracefully
-                System.exit(0);
-                break;
-            case "Go":
-                PipeModel model = new PipeModel();
-                
-                model = this.tryUpdateModel();
-                
-                if(model == null)
-                {
-                    
-                    throw new Exception("Model is null after trying to update");
-                }
-                
-                System.out.println("Going to quote");
-                this.engine.getQuote(model, this);
-                
-            default:
-                break;
-        }
-        }
-        catch(Exception ex)
-        {
+        try {
+            //main event handler
+            switch (evnt.getActionCommand()) {
+                case "Exit":
+                    //terminate gracefully
+                    System.exit(0);
+                    break;
+                case "Go":
+                    PipeModel model = new PipeModel();
+
+                    model = this.tryUpdateModel();
+
+                    if (model == null) {
+
+                        throw new Exception("Model is null after trying to update");
+                    }
+
+                    System.out.println("Going to quote");
+                    this.engine.getQuote(model, this);
+
+                default:
+                    break;
+            }
+        } catch (Exception ex) {
             swallowError(ex);
         }
     }
@@ -210,9 +207,11 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private String evaluateAsComboBox(String key) {
         return ((JComboBox) this.components.get(key)).getSelectedItem().toString();
     }
+
     private String evaluateAsTextbox(String key) {
         return ((JTextField) this.components.get(key)).getText();
     }
+
     public PipeModel tryUpdateModel() {
         PipeColour colour = PipeColour.valueOf(evaluateAsComboBox("Pipe Colour"));
         PipeGrade grade = PipeGrade.valueOf(evaluateAsComboBox("Pipe Grade"));
@@ -240,20 +239,20 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         StringBuilder output = new StringBuilder();
         output.append("------------------------- \n");
         output.append("Price: " + model.getTotalCost() + "\n");
-        output.append(" Pipe: " + model.getPipe().getGrade()+ "\n");
+        output.append(" Pipe: " + model.getPipe().getGrade() + "\n");
         output.append(" Volume: " + model.getTotalPipe() + "\n");
         information.setText(output.toString());
-        
+
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     private void swallowError(Exception ex) {
         //improve this at a later date.
         JOptionPane.showMessageDialog(this, "Something went wrong", "Error", JOptionPane.OK_OPTION);
-        
+
     }
-    private void swallowError(Exception ex, String title)
-    {
+
+    private void swallowError(Exception ex, String title) {
         JOptionPane.showMessageDialog(this, ex.getMessage(), title, JOptionPane.OK_OPTION);
     }
 //
@@ -336,11 +335,12 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 //        tryUpdateModel(new PipeModel());
 //    }
 //    
-    public void showError(String errorTitle, Exception ex)
-    {
+
+    public void showError(String errorTitle, Exception ex) {
         swallowError(ex, errorTitle);
         this.mainInterface.setSelectedIndex(0);
     }
+
     private String parseWords(String toParse) {
         toParse = toParse.replace("get", "");
         toParse = toParse.replace("_", " ");
@@ -363,11 +363,10 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         informationScreen.setText("Order not yet completed");
 
     }
-    private boolean ignoreMethod(String humanName)
-    {
+
+    private boolean ignoreMethod(String humanName) {
         boolean returnval = false;
-        switch(humanName.toLowerCase())
-        {
+        switch (humanName.toLowerCase()) {
             case "equals":
             case "notify":
             case "hash code":
@@ -378,9 +377,10 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                 returnval = true;
                 break;
         }
-        
+
         return returnval;
     }
+
     /**
      * Initialize the interface with the model and it's types.
      *
@@ -389,22 +389,31 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     //This uses reflection.
     private void initInformationScreenWithModel(Model model) {
         try {
+            this.informationTab.setLayout(new BorderLayout());
+            JPanel leftPanel, rightPanel, centrePanel;
+            leftPanel = new JPanel(new FlowLayout());
+            this.informationTab.add(leftPanel, BorderLayout.LINE_START);
+            rightPanel = new JPanel(new FlowLayout());
+            this.informationTab.add(rightPanel, BorderLayout.LINE_END);
+            centrePanel = new JPanel(new FlowLayout());
+            this.informationTab.add(centrePanel, BorderLayout.CENTER);
+            
 
-            ButtonGroup buttonGroup = new ButtonGroup();
             Class<?> specificModel = Class.forName(model.getClass().getName());
-
+            
             Method[] members = specificModel.getMethods();
             JComponent newComponent = null;
             for (Method member : members) {
                 String memberHumanName = parseWords(member.getName());
                 Class<?> memberType = member.getReturnType();
-                if(this.ignoreMethod(memberHumanName))
+                if (this.ignoreMethod(memberHumanName)) {
                     continue;
-            
+                }
+
                 //if type is boolean then create a RadioButton, grouped.
                 if (memberType.getTypeName().equals(Boolean.class.getTypeName())) {
                     newComponent = new JCheckBox(memberHumanName);
-
+                    rightPanel.add(newComponent);
                 } //if enum then just create a textbox.
                 if (memberType.isEnum()) {
                     JPanel enclosingPanel = new JPanel();
@@ -413,16 +422,20 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     Object[] eMembers = memberType.getEnumConstants();
                     newComponent = new JComboBox(eMembers);
                     enclosingPanel.add(newComponent);
-
+                    centrePanel.add(newComponent);
                 }
-                
+
                 if (memberType.getTypeName().equals(Float.class.getName())) {
                     newComponent = new JTextField(memberHumanName);
                     newComponent.addKeyListener(this);
+                    leftPanel.add(new JLabel(memberHumanName + ":"));
+                    leftPanel.add(newComponent);
                 }
+
                 if (newComponent != null) {
-                    System.out.println("Added text field for: " + memberHumanName);
-                    this.informationTab.add(newComponent);
+//                    System.out.println("Added text field for: " + memberHumanName);
+//                    this.informationTab.add(newComponent);
+//                    this.components.put(memberHumanName, newComponent);
                     this.components.put(memberHumanName, newComponent);
                 }
 
@@ -437,7 +450,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         go.addActionListener(this);
         go.setEnabled(false);
         this.components.put("Go", go);
-        this.informationTab.add(go);
+        this.informationTab.add(go, BorderLayout.SOUTH);
     }
 
 }
