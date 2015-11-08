@@ -14,7 +14,10 @@ import pipesrus.Models.*;
 import java.util.*;
 import pipesrus.Interface.NumberTextBox;
 import java.lang.reflect.*;
+import javax.imageio.ImageIO;
 import pipesrus.PriceEngine.*;
+import java.io.*;
+import pipesrus.misc.*;
 
 /**
  *
@@ -38,16 +41,18 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private JPanel informationTab, paymentTab;
     private PriceEngine engine;
 
-    public PipesRUsGUI() {
+    public PipesRUsGUI(){
 
         super();
+        try {
+        File icon = new File("pipe.ico");   
+        this.setIconImage(ImageIO.read(icon));
         //*INITMENUBAR* must be called before altering other GUI stuff
         initMenuBar();
         this.engine = new PriceEngine();
         this.components = new HashMap<>();
         this.informationTab = new JPanel();
         this.paymentTab = new JPanel();
-        try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {
             swallowError(ex);
@@ -63,7 +68,12 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-
+        //////////////////////////////////// exp ////////////////////////
+//        Object [][] tableArray =
+//                new String[][]{{"Hell","O", "O"}, {"Hell","O", "O"}, {"Row Three", "F", "F"}};
+//        
+//        openTableWindow(tableArray);
+        //////////////////////////////////////// exp //////////////////////
         //throw new UnsupportedOperationException("Not yet implemented");
         initInformationScreenWithModel(new PipeModel());
         initOrderScreen();
@@ -79,6 +89,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         //this.setLayout(new FlowLayout());
         this.setSize((int) Math.floor(userWindow.width * sizePercentage),
                 (int) Math.floor(userWindow.height * sizePercentage));
+        
+
     }
 
     private void print(String value) {
@@ -231,7 +243,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                 grade, colour, length, diameter);
 
     }
-
+    @Override
     public void acceptOrderModel(OrderModel model) {
         this.mainInterface.setEnabledAt(1, true);
         this.mainInterface.setSelectedIndex(1);
@@ -341,6 +353,18 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         this.mainInterface.setSelectedIndex(0);
     }
 
+    private void openTableWindow(Object[][] table) {
+        StandardGUI tableWindow = new StandardGUI("Order Summary");
+        JTable orderTable = new JTable(table,
+                new String[]{"Order Num", "Length", "Total Value"});
+        JPanel tableContainer = new JPanel();
+        tableContainer.setBorder(BorderFactory.createTitledBorder("Order Summary"));
+        tableContainer.setLayout(new BorderLayout());
+        tableContainer.add(orderTable, BorderLayout.CENTER);
+        tableWindow.add(tableContainer);
+        tableWindow.setVisible(true);
+    }
+
     private String parseWords(String toParse) {
         toParse = toParse.replace("get", "");
         toParse = toParse.replace("_", " ");
@@ -388,19 +412,21 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
      */
     //This uses reflection.
     private void initInformationScreenWithModel(Model model) {
+        JPanel leftPanel, rightPanel, centrePanel, southPanel;
+        this.informationTab.setLayout(new BorderLayout());
+
+        leftPanel = new JPanel(new FlowLayout());
+        this.informationTab.add(leftPanel, BorderLayout.LINE_START);
+        rightPanel = new JPanel(new FlowLayout());
+        this.informationTab.add(rightPanel, BorderLayout.LINE_END);
+        centrePanel = new JPanel(new FlowLayout());
+        this.informationTab.add(centrePanel, BorderLayout.CENTER);
+        southPanel = new JPanel(new FlowLayout());
+        this.informationTab.add(southPanel, BorderLayout.SOUTH);
         try {
-            this.informationTab.setLayout(new BorderLayout());
-            JPanel leftPanel, rightPanel, centrePanel;
-            leftPanel = new JPanel(new FlowLayout());
-            this.informationTab.add(leftPanel, BorderLayout.LINE_START);
-            rightPanel = new JPanel(new FlowLayout());
-            this.informationTab.add(rightPanel, BorderLayout.LINE_END);
-            centrePanel = new JPanel(new FlowLayout());
-            this.informationTab.add(centrePanel, BorderLayout.CENTER);
-            
 
             Class<?> specificModel = Class.forName(model.getClass().getName());
-            
+
             Method[] members = specificModel.getMethods();
             JComponent newComponent = null;
             for (Method member : members) {
@@ -450,7 +476,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         go.addActionListener(this);
         go.setEnabled(false);
         this.components.put("Go", go);
-        this.informationTab.add(go, BorderLayout.SOUTH);
+        southPanel.add(go);
     }
 
 }
