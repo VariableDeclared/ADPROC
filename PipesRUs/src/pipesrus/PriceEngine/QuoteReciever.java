@@ -4,13 +4,12 @@
  * and open the template in the editor.
  */
 package pipesrus.PriceEngine;
-
+import pipesrus.Models.*;
 /**
  *
- * @author UP738106
+ * @author UP732011 <UP732011@myport.ac.uk>
  */
-public interface IChemicallyResistedPipe 
-{   
-    public boolean getChemicalResistance();
-    public void setChemicalResistance(boolean resistance);
+public interface QuoteReciever {
+    public void acceptOrderModel(OrderModel model);
+    public void showError(String errorTitle, Exception ex);
 }
