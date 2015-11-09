@@ -15,6 +15,7 @@ import pipesrus.Interface.PipesRUsTable;
 import java.lang.reflect.*;
 import javax.imageio.ImageIO;
 import pipesrus.PriceEngine.*;
+import javax.swing.table.*;
 import java.io.*;
 import pipesrus.misc.*;
 
@@ -40,6 +41,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private JPanel informationTab, paymentTab;
     private PriceEngine engine;
     private JTable summaryTable;
+    private ArrayList<String[]> stringTable;
+    private String [] columnNames ;
 
     public PipesRUsGUI()
     {
@@ -57,6 +60,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         {
             swallowError(ex);
         }
+        this.stringTable = new ArrayList<>(25);
+        this.columnNames = new String[]{"Pipe", "Total Length", "Total Value"};
         this.engine = new PriceEngine();
         this.components = new HashMap<>();
         this.informationTab = new JPanel();
@@ -67,7 +72,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         this.informationTab.setLayout(new FlowLayout());
 
         //lock the user to one tab.
-        this.mainInterface.setEnabledAt(1, false);
+        //this.mainInterface.setEnabledAt(1, false);
         this.add(mainInterface);
         this.setTitle("Pipes R Us");
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
@@ -207,15 +212,12 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 //        JTextArea informationScreen = new JTextArea();
 //        this.paymentTab.add(informationScreen);
 //        informationScreen.setText("Order not yet completed");
-        this.summaryTable = new PipesRUsTable(new String[][]
-        {
-            {
-                "", "", ""
-            }
-        }, new String[]
-        {
-            "Pipe", "Total Length", "Total Value"
-        });
+        this.summaryTable = new PipesRUsTable(new DefaultTableModel(new String[][]{{"","","£0.00"}}, 
+                new String[]{"Pipe", "Total Length", "Total Value"}));
+        DefaultTableModel model = (DefaultTableModel) this.summaryTable.getModel();
+
+        System.out.println("Setting table model");
+        
         this.summaryTable.setColumnSelectionAllowed(false);
         JPanel orderPanel = new JPanel(new BorderLayout());
         orderPanel.setBorder(BorderFactory.createTitledBorder("Order Summary"));
