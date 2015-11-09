@@ -11,7 +11,7 @@ import java.awt.event.*;
 
 /**
  *
- * @author Pete
+ * @author 732011
  */
 public class StandardGUI extends JFrame {
 
