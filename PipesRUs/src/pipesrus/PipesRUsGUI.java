@@ -72,7 +72,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         this.informationTab.setLayout(new FlowLayout());
 
         //lock the user to one tab.
-        //this.mainInterface.setEnabledAt(1, false);
+        this.mainInterface.setEnabledAt(1, false);
         this.add(mainInterface);
         this.setTitle("Pipes R Us");
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
@@ -212,10 +212,10 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 //        JTextArea informationScreen = new JTextArea();
 //        this.paymentTab.add(informationScreen);
 //        informationScreen.setText("Order not yet completed");
-        this.summaryTable = new PipesRUsTable(new DefaultTableModel(new String[][]{{"","","£0.00"}}, 
+        this.summaryTable = new PipesRUsTable(new PipesRUsTableModel(new String[][]{{"","","£0.00"}}, 
                 new String[]{"Pipe", "Total Length", "Total Value"}));
-        DefaultTableModel model = (DefaultTableModel) this.summaryTable.getModel();
 
+        
         System.out.println("Setting table model");
         
         this.summaryTable.setColumnSelectionAllowed(false);
@@ -323,7 +323,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
     private void swallowError(Exception ex, String title)
     {
-        JOptionPane.showMessageDialog(this, ex.getMessage(), title, JOptionPane.OK_OPTION);
+        JOptionPane.showMessageDialog(this, ex.getCause(), title, JOptionPane.OK_OPTION);
     }
 
     public void showError(String errorTitle, Exception ex)

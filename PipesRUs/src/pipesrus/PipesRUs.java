@@ -23,7 +23,7 @@ public class PipesRUs {
 
             gui.setVisible(true);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage());
+            JOptionPane.showMessageDialog(null, ex.getClass().toString() + " "+ ex.getMessage());
         }
     }
 
