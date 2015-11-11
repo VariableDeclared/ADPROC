@@ -6,7 +6,7 @@
 package pipesrus.PriceEngine;
 
 /**
- *
+ * Interface to be used in the Pipes 'R' us application. Defines methods needed
  * @author UP738106
  */
 public interface IInsulatedPipe
