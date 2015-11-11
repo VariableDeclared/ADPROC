@@ -43,6 +43,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private JTable summaryTable;
     private ArrayList<String[]> stringTable;
     private String [] columnNames ;
+    
+    
 
     public PipesRUsGUI()
     {
@@ -56,7 +58,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             initMenuBar();
 
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ex)
+        } 
+        catch (Exception ex)
         {
             swallowError(ex);
         }
@@ -72,7 +75,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         this.informationTab.setLayout(new FlowLayout());
 
         //lock the user to one tab.
-        this.mainInterface.setEnabledAt(1, false);
+        //this.mainInterface.setEnabledAt(1, false);
         this.add(mainInterface);
         this.setTitle("Pipes R Us");
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
@@ -124,14 +127,18 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         } catch (Exception ex)
         {
             System.out.println("except");
-            this.components.get("Go").setEnabled(false);
+            this.components.get("Add").setEnabled(false);
         }
+        
         if (source.getText().isEmpty())
         {
-            this.components.get("Go").setEnabled(false);
-        } else
+            this.components.get("Add").setEnabled(false);
+        } 
+        
+        else
+            
         {
-            this.components.get("Go").setEnabled(true);
+            this.components.get("Add").setEnabled(true);
         }
 
     }
@@ -157,6 +164,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     {
         try
         {
+            
+            PipeModel model = new PipeModel();
             //main event handler
             switch (evnt.getActionCommand())
             {
@@ -164,20 +173,23 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     //terminate gracefully
                     System.exit(0);
                     break;
-                case "Go":
-                    PipeModel model = new PipeModel();
-
+                    
+                case "Add":
+                    //
+                    model = this.tryUpdateModel();
+                    break;
+                    
+                case "Submit":
                     model = this.tryUpdateModel();
 
                     if (model == null)
                     {
-
                         throw new Exception("Model is null after trying to update");
                     }
 
                     System.out.println("Going to quote");
                     this.engine.getQuote(model, this);
-
+                    
                 default:
                     break;
             }
@@ -467,11 +479,20 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         {
             swallowError(ex);
         }
-        JButton go = new JButton("Go");
+        
+        
+        JButton go = new JButton("Add");
         go.addActionListener(this);
         go.setEnabled(false);
-        this.components.put("Go", go);
+        this.components.put("Add", go);
         southPanel.add(go);
+        
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(this);
+        submit.setVisible(true);
+        this.components.put("Submit", submit);
+        southPanel.add(submit);
+        
     }
 
 }
