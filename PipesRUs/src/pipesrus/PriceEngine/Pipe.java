@@ -86,6 +86,7 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
     {
         return this.chemicalResistance;
     }
+    
     @Override
     public void setChemicalResistance(boolean chemRes)
     {
