@@ -11,21 +11,17 @@ package pipesrus.PriceEngine;
  */
 public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
 {
-    private boolean insulated = true;
+    private final boolean insulated = true;
     
     public PipeTypeFour(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter,grade, chemResist);
+        this._pipeType = 4;
     }
-    
+    @Override
     public boolean getInsulatedBool()
     {
         return this.insulated;
-    }
-    
-    public void setInsulatedBool(boolean reinforced)
-    {
-        this.insulated = reinforced;
     }
     
     @Override

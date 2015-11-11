@@ -12,18 +12,15 @@ package pipesrus.PriceEngine;
  */
 public class PipeTypeFive extends PipeTypeFour implements IOuterReinforcedPipe
 {
-    private boolean outerReinforced = true;
+    private final boolean outerReinforced = true;
         
     public PipeTypeFive(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter, grade, chemResist);
+        this._pipeType = 5;
     }
     
-    public void setOuterReinforcedBool(boolean reinforcedBool)
-    {
-        this.outerReinforced = reinforcedBool;
-    }
-    
+    @Override
     public boolean getOuterReinforcedBool()
     {
         return this.outerReinforced;

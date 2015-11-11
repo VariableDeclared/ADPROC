@@ -12,5 +12,4 @@ package pipesrus.PriceEngine;
 public interface IInsulatedPipe
 {
     public boolean getInsulatedBool();
-    public void setInsulatedBool(boolean insulated);
 }

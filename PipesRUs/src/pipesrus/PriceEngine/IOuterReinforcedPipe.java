@@ -11,7 +11,6 @@ package pipesrus.PriceEngine;
  */
 public interface IOuterReinforcedPipe
 {
-    
-    public void setOuterReinforcedBool(boolean reinforced);
+
     public boolean getOuterReinforcedBool();
 }

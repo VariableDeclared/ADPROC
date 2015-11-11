@@ -14,7 +14,8 @@ public class PipeTypeTwo extends PipeTypeOne
     public PipeTypeTwo(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter,grade, chemResist);
-        this.colour = PipeColour.ONE_COLOUR;
+        this._colour = PipeColour.ONE_COLOUR;
+        this._pipeType = 2;
     }
     @Override
     public double getPrice()
