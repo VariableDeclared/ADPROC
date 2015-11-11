@@ -12,18 +12,19 @@ import java.util.Set;
  *
  * @author UP738106
  */
-public class PipeTypeOne extends Pipe implements IColouredPipe 
+public class PipeTypeOne extends Pipe
 {
-    protected PipeColour colour;
+    
     public PipeTypeOne(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter, grade, chemResist);
-        this.colour = PipeColour.NO_COLOUR;
+        this._colour = PipeColour.NO_COLOUR;
+        this._pipeType = 1;
     }
     @Override
     public PipeColour getPipeColour()
     {
-        return this.colour;
+        return this._colour;
     }
 
     public double getPrice()

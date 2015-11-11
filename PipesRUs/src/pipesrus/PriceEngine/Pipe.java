@@ -11,7 +11,7 @@ import java.util.HashSet;
  *
  * @author UP738106
  */
-abstract public class Pipe implements IChemicallyResistedPipe
+abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe 
 {
     private static final double METERSPERINCH  =  0.0254;
     
@@ -19,9 +19,9 @@ abstract public class Pipe implements IChemicallyResistedPipe
 
     protected PipeGrade _ePipeGrade;
 
-    //private PipeColour _ePipeColour;
+    protected PipeColour _colour;
 
-    private int _pipeType;
+    protected int _pipeType;
     
     private boolean chemicalResistance;   
 
@@ -49,7 +49,11 @@ abstract public class Pipe implements IChemicallyResistedPipe
 //    {
 //        this._ePipeGrade = newGrade;
 //    }
-    
+    @Override
+    public PipeColour getPipeColour()
+    {
+        return this._colour;
+    }
     public PipeGrade getGrade()
     {
         return this._ePipeGrade;
