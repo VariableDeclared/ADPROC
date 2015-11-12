@@ -12,7 +12,7 @@ package pipesrus.PriceEngine;
 public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
 {
     private final boolean insulated = true;
-    
+
     /**
      * The constructor for this pipe, initialises with parameter values
      * @param length The length of pipe
@@ -20,7 +20,8 @@ public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
      * @param grade What pipe grade it is
      * @param chemResist Whether or not the pipe is chemically resisted
      */
-    public PipeTypeFour(float length, float diameter, PipeGrade grade, boolean chemResist)
+
+    public PipeTypeFour(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter,grade, chemResist);
         this._pipeType = PipeType.FOUR;
