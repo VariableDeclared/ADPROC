@@ -44,7 +44,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
     private ArrayList<String[]> stringTable;
     private String [] columnNames ;
-    private LinkedList<PipeModel> modelList;
+    private LinkedList<Pipe> modelList;
     private double runningTotal = 0;
 
     public PipesRUsGUI()
@@ -79,7 +79,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         
         this.informationTab.setLayout(new FlowLayout());
         
-        this.modelList = new LinkedList<PipeModel>(); //for storing each model
+        this.modelList = new LinkedList<Pipe>(); //for storing each model
 
         //lock the user to one tab.
        // this.mainInterface.setEnabledAt(1, false);
@@ -181,17 +181,21 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     break;
                     
                 case "Add":
-                    modelList.add(this.tryUpdateModel()); //append to linkedList
-                    runningTotal += this.tryUpdateModel().getPrice(); //add price to order total
+                    PipeModel model = this.tryUpdateModel();
+                     //append to linkedList
+                    Pipe pipe = this.engine.getPipeForModel(this.tryUpdateModel());
+                    modelList.add(pipe);
+                    runningTotal += pipe.getPrice(); //add price to order total
                     
                     DefaultTableModel table = (DefaultTableModel)this.summaryTable.getModel();
+                    
                     table.addRow(new Object[]{
-                                              this.tryUpdateModel().getPipeGrade(),
-                                              this.tryUpdateModel().getPipeColour(),
-                                              this.tryUpdateModel().getInsulated(),
-                                              this.tryUpdateModel().getReinforced(),
-                                              this.tryUpdateModel().getLength(),
-                                              this.tryUpdateModel().getPrice()
+                                              model.getPipeGrade(),
+                                              model.getPipeColour(),
+                                              model.getInsulated(),
+                                              model.getReinforced(),
+                                              model.getLength(),
+                                              pipe.getPrice()
                                               });
                     
                     table.setValueAt(this.runningTotal, 0, 5); //sets the 'Total' cell to the sum of all pipe prices
@@ -209,7 +213,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                       System.out.println("Size: " + modelList.size()); //debug 
                     
                     System.out.println("Going to quote");
-                    this.engine.getQuote(modelList, this); 
+                    //move the user to the order tab
+                    this.mainInterface.setSelectedIndex(1);
 
                 default:
                     break;
@@ -336,15 +341,15 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     {
         this.mainInterface.setEnabledAt(1, true);
         this.mainInterface.setSelectedIndex(1);
-        JTextArea information = (JTextArea) this.paymentTab.getComponent(0);
-        StringBuilder output = new StringBuilder();
-        output.append("------------------------- \n");
-        output.append("Price: " + model.getTotalCost() + "\n");
-       // output.append(" Pipe: " + model.getPipes().getGrade() + "\n");
-        output.append(" Volume: " + model.getTotalPipe() + "\n");
-        information.setText(output.toString());
+//        JTextArea information = (JTextArea) this.paymentTab.getComponent(0);
+//        StringBuilder output = new StringBuilder();
+//        output.append("------------------------- \n");
+//        output.append("Price: " + model.getTotalCost() + "\n");
+//       // output.append(" Pipe: " + model.getPipes().getGrade() + "\n");
+//        output.append(" Volume: " + model.getTotalPipe() + "\n");
+//        information.setText(output.toString());
 
-        throw new UnsupportedOperationException("Not yet implemented");
+        //throw new UnsupportedOperationException("Not yet implemented");
     }
 
     private void swallowError(Exception ex)

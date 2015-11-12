@@ -19,6 +19,7 @@ public class PipeModel extends Model {
     double length, diameter;
     double price;
     double volume;
+    Pipe _pipe;
     /**
      * Shouldn't be called by the system, only used so that the system can see methods
      */
@@ -50,76 +51,83 @@ public class PipeModel extends Model {
         this.pipeColour = colour;
         this.length = length;
         this.diameter = diameter;
-        
-        double radius = diameter / 2;
-        this.volume = Math.PI * (radius * radius) * length;
+//        
+//        double radius = diameter / 2;
+//        this.volume = Math.PI * (radius * radius) * length;
     }
     public PipeColour getPipeColour()
     {
         return this.pipeColour;
     }
     
-    public double getPrice()
-    {
-        double price = 0;
-        double additionalCostPercentage = 1;    //1 = 100% ie no extra
-        
-        if(this.reinforced)
-        {
-            additionalCostPercentage += 0.15;   //extra 15%
-        }
-        
-        if(this.insulated)
-        {
-            additionalCostPercentage += 0.14;  //extra 14%
-        } 
-        
-        if(this.chemicalResistance)
-        {
-            additionalCostPercentage += 0.12;   //extra 12%
-        }
-        
-        if(this.pipeColour == PipeColour.ONE_COLOUR)
-        {
-            additionalCostPercentage += 0.12;
-        }
-        
-         if(this.pipeColour == PipeColour.TWO_COLOURS)
-        {
-            additionalCostPercentage += 0.17;
-        }
-        
-         switch(this.pipeGrade)
-         {
-             case ONE:
-                 price = 30 * this.getVoloume();
-                 break;
-                 
-            case TWO:
-                 price = 32 * this.getVoloume();
-                 break;
-            
-            case THREE:
-                 price = 35 * this.getVoloume();
-                 break;
-            
-            case FOUR:
-                 price = 40 * this.getVoloume();
-                 break;
-            
-            case FIVE:
-                 price = 46 * this.getVoloume();
-                 break;
-              
-            default:
-                break;
-         }
-         double total = price * additionalCostPercentage;
-         
-        System.out.println("Price:" + total);
-        return total / 100; //put into £
-    }
-    
+//    public double getPrice()
+//    {
+//        double price = 0;
+//        double additionalCostPercentage = 1;    //1 = 100% ie no extra
+//        
+//        if(this.reinforced)
+//        {
+//            additionalCostPercentage += 0.15;   //extra 15%
+//        }
+//        
+//        if(this.insulated)
+//        {
+//            additionalCostPercentage += 0.14;  //extra 14%
+//        } 
+//        
+//        if(this.chemicalResistance)
+//        {
+//            additionalCostPercentage += 0.12;   //extra 12%
+//        }
+//        
+//        if(this.pipeColour == PipeColour.ONE_COLOUR)
+//        {
+//            additionalCostPercentage += 0.12;
+//        }
+//        
+//         if(this.pipeColour == PipeColour.TWO_COLOURS)
+//        {
+//            additionalCostPercentage += 0.17;
+//        }
+//        
+//         switch(this.pipeGrade)
+//         {
+//             case ONE:
+//                 price = 30 * this.getVoloume();
+//                 break;
+//                 
+//            case TWO:
+//                 price = 32 * this.getVoloume();
+//                 break;
+//            
+//            case THREE:
+//                 price = 35 * this.getVoloume();
+//                 break;
+//            
+//            case FOUR:
+//                 price = 40 * this.getVoloume();
+//                 break;
+//            
+//            case FIVE:
+//                 price = 46 * this.getVoloume();
+//                 break;
+//              
+//            default:
+//                break;
+//         }
+//         double total = price * additionalCostPercentage;
+//         
+//        System.out.println("Price:" + total);
+//        return total / 100; //put into £
+//    }
+//    public void setPipe(Pipe pipe)
+//    {
+//        this._pipe = pipe;
+//    }
+//    public Pipe getPipe()
+//    {
+//        return this._pipe;
+//    }
     public PipeGrade getPipeGrade()
     {
         return this.pipeGrade;
@@ -145,10 +153,10 @@ public class PipeModel extends Model {
         return this.diameter;
     }
     
-    public double getVoloume()
-    {
-        double radius = this.diameter /2;
-        
-        return Math.PI * (radius * radius) * this.length;
-    }
+//    public double getVoloume()
+//    {
+//        double radius = this.diameter /2;
+//        
+//        return Math.PI * (radius * radius) * this.length;
+//    }
 }

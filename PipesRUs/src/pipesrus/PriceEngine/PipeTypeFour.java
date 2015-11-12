@@ -47,7 +47,7 @@ public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
         
         
         //insulation
-        price *= 1.14;
+        price += this._priceForPlastic * 1.14;
         return price;
     }
     

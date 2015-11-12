@@ -12,23 +12,23 @@ import java.util.LinkedList;
  */
 public class OrderModel 
 {
-    private final LinkedList<PipeModel> pipeList;
+    private final LinkedList<Pipe> pipeList;
     
     private final double totalCost;
     
-    public OrderModel(LinkedList<PipeModel> pipes)
+    public OrderModel(LinkedList<Pipe> pipes)
     {
         this.pipeList = pipes;
        
-        double price = 0;
+        double price = 1;
         for(int i = 0; i < this.pipeList.size(); i++)
         {
-            price += pipeList.get(i).getPrice();
+            price += pipes.get(i).getPrice();
         }
         
         this.totalCost = price; 
    }
-    public LinkedList<PipeModel> getPipes()
+    public LinkedList<Pipe> getPipes()
     {
         return this.pipeList;
     }
