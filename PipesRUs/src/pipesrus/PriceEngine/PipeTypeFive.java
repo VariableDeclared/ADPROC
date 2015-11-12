@@ -21,7 +21,7 @@ public class PipeTypeFive extends PipeTypeFour implements IOuterReinforcedPipe
      * @param grade What pipe grade it is
      * @param chemResist Whether or not the pipe is chemically resisted
      */
-    public PipeTypeFive(float length, float diameter, PipeGrade grade, boolean chemResist)
+    public PipeTypeFive(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter, grade, chemResist);
         this._pipeType = PipeType.FIVE;

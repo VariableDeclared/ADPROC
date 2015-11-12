@@ -18,7 +18,7 @@ public class PipeTypeThree extends PipeTypeTwo
      * @param grade What pipe grade it is
      * @param chemResist Whether or not the pipe is chemically resisted
      */
-    public PipeTypeThree(float length, float diameter, PipeGrade grade, boolean chemResist)
+    public PipeTypeThree(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter,grade, chemResist);
         this._colour = PipeColour.TWO_COLOURS;

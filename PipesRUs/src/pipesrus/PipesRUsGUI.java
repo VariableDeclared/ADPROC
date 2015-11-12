@@ -29,7 +29,7 @@ import pipesrus.misc.*;
 /*
  *   To do:
  *       Fix the labelling of combo box stuff
- *
+ *       
  */
 public class PipesRUsGUI extends JFrame implements ActionListener,
         QuoteReciever,
@@ -41,6 +41,10 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private JPanel informationTab, paymentTab;
     private PriceEngine engine;
     private JTable summaryTable;
+
+    private ArrayList<String[]> stringTable;
+    private String [] columnNames ;
+    private LinkedList<PipeModel> modelList;
 
     public PipesRUsGUI()
     {
@@ -59,18 +63,25 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             swallowError(ex);
         }
 
-        //this.columnNames = new String[]{"Pipe", "Total Length", "Total Value"};
+        this.stringTable = new ArrayList<>(25);
+        this.columnNames = new String[]{"Pipe Grade", "Total Length", "Total Value"}; // redundant
+        
         this.engine = new PriceEngine();
         this.components = new HashMap<>();
+        
         this.informationTab = new JPanel();
         this.paymentTab = new JPanel(new BorderLayout());
+        
         this.mainInterface = new JTabbedPane();
         this.mainInterface.addTab("Information", this.informationTab);
         this.mainInterface.addTab("Order Summary", this.paymentTab);
+        
         this.informationTab.setLayout(new FlowLayout());
+        
+        this.modelList = new LinkedList<PipeModel>(); //for storing each model
 
         //lock the user to one tab.
-        this.mainInterface.setEnabledAt(1, false);
+       // this.mainInterface.setEnabledAt(1, false);
         this.add(mainInterface);
         this.setTitle("Pipes R Us");
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
@@ -117,19 +128,20 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         JTextField source = (JTextField) e.getSource();
         try
         {
-            Float test = Float.valueOf(source.getText());
+            Double test = Double.valueOf(source.getText());
             System.out.println(test);
         } catch (Exception ex)
         {
             System.out.println("except");
-            this.components.get("Go").setEnabled(false);
+            this.components.get("Add").setEnabled(false);
         }
         if (source.getText().isEmpty())
         {
-            this.components.get("Go").setEnabled(false);
-        } else
+            this.components.get("Add").setEnabled(false);
+        } 
+        else
         {
-            this.components.get("Go").setEnabled(true);
+            this.components.get("Add").setEnabled(true);
         }
 
     }
@@ -155,26 +167,41 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     {
         try
         {
+            
             //main event handler
+            
             switch (evnt.getActionCommand())
             {
                 case "Exit":
                     //terminate gracefully
                     System.exit(0);
                     break;
-                case "Go":
-                    PipeModel model = new PipeModel();
-
-                    model = this.tryUpdateModel();
-
-                    if (model == null)
+                    
+                case "Add":
+                    modelList.add(this.tryUpdateModel()); //append to linkedList
+                    DefaultTableModel table = (DefaultTableModel)this.summaryTable.getModel();
+                    table.addRow(new Object[]{
+                                              this.tryUpdateModel().getPipeGrade(),
+                                              this.tryUpdateModel().getPipeColour(),
+                                              this.tryUpdateModel().getInsulated(),
+                                              this.tryUpdateModel().getReinforced(),
+                                              this.tryUpdateModel().getLength(),
+                                              this.tryUpdateModel().getPrice()
+                                              });
+                    break;
+                    
+                case "Submit":
+                  
+                    if (modelList.size() == 0)
                     {
-
-                        throw new Exception("Model is null after trying to update");
+                        throw new Exception("Model is empty after trying to update");
                     }
 
+                  
+                      System.out.println("Size: " + modelList.size()); //debug 
+                    
                     System.out.println("Going to quote");
-                    this.engine.getQuote(model, this);
+                    this.engine.getQuote(modelList, this); 
 
                 default:
                     break;
@@ -210,8 +237,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 //        JTextArea informationScreen = new JTextArea();
 //        this.paymentTab.add(informationScreen);
 //        informationScreen.setText("Order not yet completed");
-        this.summaryTable = new PipesRUsTable(new PipesRUsTableModel(new String[][]{{"","","£0.00"}}, 
-                new String[]{"Pipe", "Total Length", "Total Value"}));
+        this.summaryTable = new PipesRUsTable(new PipesRUsTableModel(new String[][]{{"", "", "", "", "", "£0.00"}}, 
+                new String[]{"Pipe Grade", "Colour", "Inner Insulation", "Outer Reinforcement", "Total Length", "Total Value"}));
 
         
         System.out.println("Setting table model");
@@ -282,8 +309,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         Boolean chemicalResistance = evaluateAsRadioButton("Chemical Resistance");
         Boolean insulated = evaluateAsRadioButton("Insulated");
         Boolean reinforced = evaluateAsRadioButton("Reinforced");
-        Float length = Float.valueOf(evaluateAsTextbox("Length"));
-        Float diameter = Float.valueOf(evaluateAsTextbox("Diameter"));
+        Double length = Double.valueOf(evaluateAsTextbox("Length"));
+        Double diameter = Double.valueOf(evaluateAsTextbox("Diameter"));
 //        System.out.println(colour);
 //        System.out.println(grade);
 //        System.out.println(chemicalResistance);
@@ -305,7 +332,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         StringBuilder output = new StringBuilder();
         output.append("------------------------- \n");
         output.append("Price: " + model.getTotalCost() + "\n");
-        output.append(" Pipe: " + model.getPipe().getGrade() + "\n");
+       // output.append(" Pipe: " + model.getPipes().getGrade() + "\n");
         output.append(" Volume: " + model.getTotalPipe() + "\n");
         information.setText(output.toString());
 
@@ -381,6 +408,10 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             case "notify all":
             case "class":
             case "to string":
+            case "voloume":           
+            case "voolume":            
+            case "price":
+
                 returnval = true;
                 break;
         }
@@ -440,7 +471,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     centrePanel.add(newComponent);
                 }
 
-                if (memberType.getTypeName().equals(Float.class.getName()))
+                if (memberType.getTypeName().equals(double.class.getName()))
                 {
                     newComponent = new JTextField(memberHumanName);
                     newComponent.addKeyListener(this);
@@ -465,11 +496,18 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         {
             swallowError(ex);
         }
-        JButton go = new JButton("Go");
+        
+        JButton go = new JButton("Add");
         go.addActionListener(this);
-        go.setEnabled(false);
-        this.components.put("Go", go);
+        go.setEnabled(true);
+        this.components.put("Add", go);
         southPanel.add(go);
+        
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(this);
+        submit.setEnabled(true);
+        this.components.put("Submit", submit);
+        southPanel.add(submit);
     }
 
 }

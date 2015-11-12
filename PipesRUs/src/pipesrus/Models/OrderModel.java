@@ -5,27 +5,36 @@
  */
 package pipesrus.Models;
 import pipesrus.PriceEngine.*;
+import java.util.LinkedList;
 /**
  *
  * @author UP732011
  */
-public class OrderModel {
-    private final Pipe pipe;
+public class OrderModel 
+{
+    private final LinkedList<PipeModel> pipeList;
+    
     private final double totalCost;
-    private final double totalPipe;
-    public OrderModel(Pipe pipe, double totalCost, double totalPipe)
+    
+    public OrderModel(LinkedList<PipeModel> pipes)
     {
-        this.pipe = pipe;
-        this.totalCost = totalCost;
-        this.totalPipe = totalPipe;
-    }
-    public Pipe getPipe()
+        this.pipeList = pipes;
+       
+        double price = 0;
+        for(int i = 0; i < this.pipeList.size(); i++)
+        {
+            price += pipeList.get(i).getPrice();
+        }
+        
+        this.totalCost = price; 
+   }
+    public LinkedList<PipeModel> getPipes()
     {
-        return this.pipe;
+        return this.pipeList;
     }
     public double getTotalPipe()
     {
-        return this.totalPipe;
+        return this.pipeList.size();
     }
     public double getTotalCost()
     {
