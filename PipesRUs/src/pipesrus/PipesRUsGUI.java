@@ -41,6 +41,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private JPanel informationTab, paymentTab;
     private PriceEngine engine;
     private JTable summaryTable;
+
     private ArrayList<String[]> stringTable;
     private String [] columnNames ;
     private LinkedList<PipeModel> modelList;
@@ -62,6 +63,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         {
             swallowError(ex);
         }
+
         this.stringTable = new ArrayList<>(25);
         this.columnNames = new String[]{"Pipe Grade", "Total Length", "Total Value"}; // redundant
         

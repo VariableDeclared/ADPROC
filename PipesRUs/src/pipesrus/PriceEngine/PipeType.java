@@ -6,11 +6,13 @@
 package pipesrus.PriceEngine;
 
 /**
- * Interface to be used in the Pipes 'R' us application. Defines methods needed
- * @author UP738106
+ *
+ * @author 732011 <up732011@myport.ac.uk>
  */
-public interface IOuterReinforcedPipe
-{
-
-    public boolean getOuterReinforcedBool();
+public enum PipeType {
+    ONE,
+    TWO,
+    THREE,
+    FOUR,
+    FIVE
 }
