@@ -13,19 +13,32 @@ package pipesrus.PriceEngine;
 public class PipeTypeFive extends PipeTypeFour implements IOuterReinforcedPipe
 {
     private final boolean outerReinforced = true;
-        
+    
+    /**
+     * The constructor for this pipe, initialises with parameter values
+     * @param length The length of pipe
+     * @param diameter The diameter of the pipe
+     * @param grade What pipe grade it is
+     * @param chemResist Whether or not the pipe is chemically resisted
+     */
     public PipeTypeFive(float length, float diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter, grade, chemResist);
-        this._pipeType = 5;
+        this._pipeType = PipeType.FIVE;
     }
-    
+    /**
+     * Returns whether the pipe is reinforced
+     * @return a bool stating whether the pipe is reinforced or not
+     */
     @Override
     public boolean getOuterReinforcedBool()
     {
         return this.outerReinforced;
     }
-    
+    /**
+     * Gets the value in pounds for this pipe
+     * @return a double stating the value as pounds
+     */
     @Override
     public double getPrice()
     {
