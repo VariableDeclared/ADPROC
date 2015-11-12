@@ -17,6 +17,7 @@ public class PipeTypeTwo extends PipeTypeOne
         this._colour = PipeColour.ONE_COLOUR;
         this._pipeType = 2;
     }
+    
     @Override
     public double getPrice()
     {

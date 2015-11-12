@@ -49,6 +49,7 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
 //    {
 //        this._ePipeGrade = newGrade;
 //    }
+    
     @Override
     public PipeColour getPipeColour()
     {
