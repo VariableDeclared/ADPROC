@@ -24,9 +24,9 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
     private boolean chemicalResistance;   
 
     private final double length, diameter;
-<<<<<<< HEAD
+
     
-=======
+
     /**
      * The constructor for this pipe, initialises with parameter values
      * @param length The length of pipe
@@ -34,7 +34,7 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
      * @param grade What pipe grade it is
      * @param chemResist Whether or not the pipe is chemically resisted
      */
->>>>>>> origin/LinkedList_Test
+
     public Pipe(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         this._ePipeGrade = grade;

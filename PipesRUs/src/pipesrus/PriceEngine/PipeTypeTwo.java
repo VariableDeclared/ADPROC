@@ -11,8 +11,6 @@ package pipesrus.PriceEngine;
  */
 public class PipeTypeTwo extends PipeTypeOne
 {
-<<<<<<< HEAD
-=======
     /**
      * The constructor for this pipe, initialises with parameter values
      * @param length The length of pipe
@@ -20,7 +18,7 @@ public class PipeTypeTwo extends PipeTypeOne
      * @param grade What pipe grade it is
      * @param chemResist Whether or not the pipe is chemically resisted
      */
->>>>>>> origin/LinkedList_Test
+
     public PipeTypeTwo(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter,grade, chemResist);
