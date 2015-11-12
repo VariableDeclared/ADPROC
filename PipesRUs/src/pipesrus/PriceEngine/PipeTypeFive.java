@@ -14,7 +14,7 @@ public class PipeTypeFive extends PipeTypeFour implements IOuterReinforcedPipe
 {
     private final boolean outerReinforced = true;
         
-    public PipeTypeFive(float length, float diameter, PipeGrade grade, boolean chemResist)
+    public PipeTypeFive(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter, grade, chemResist);
         this._pipeType = 5;

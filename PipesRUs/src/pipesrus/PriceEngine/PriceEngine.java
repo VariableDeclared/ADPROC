@@ -16,24 +16,40 @@ import pipesrus.error.*;
  */
 public class PriceEngine {
 
-    public PriceEngine() {
+    public PriceEngine() 
+    {
 
     }
 
-    private Pipe processTypeThreeToFive(PipeModel model, boolean chemResistance) {
-        if (model.getPipeGrade() != PipeGrade.ONE) {
+    private Pipe processTypeThreeToFive(PipeModel model, boolean chemResistance)    
+    {
+        if (model.getPipeGrade() != PipeGrade.ONE)
+        {
             return null;
         }
 
-        if (!model.getInsulated()) {
-            return new PipeTypeThree(model.getLength(), model.getDiameter(),
-                    model.getPipeGrade(), chemResistance);
-        } else if (!model.getReinforced()) {
-            return new PipeTypeFour(model.getLength(), model.getDiameter(),
-                    model.getPipeGrade(), chemResistance);
-        } else if (model.getPipeGrade() != PipeGrade.TWO) {
-            return new PipeTypeFive(model.getLength(), model.getDiameter(),
-                    model.getPipeGrade(), chemResistance);
+        if (!model.getInsulated())
+        {
+            return new PipeTypeThree(model.getLength(), 
+                                     model.getDiameter(),
+                                     model.getPipeGrade(), 
+                                     chemResistance);
+            
+        } 
+        else if (!model.getReinforced()) 
+        {
+            return new PipeTypeFour(model.getLength(), 
+                                    model.getDiameter(),
+                                    model.getPipeGrade(), 
+                                    chemResistance);
+            
+        } 
+        else if (model.getPipeGrade() != PipeGrade.TWO) 
+        {
+            return new PipeTypeFive(model.getLength(), 
+                                    model.getDiameter(),
+                                    model.getPipeGrade(), 
+                                    chemResistance);
         }
 
         return null;

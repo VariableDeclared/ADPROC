@@ -13,7 +13,7 @@ public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
 {
     private final boolean insulated = true;
     
-    public PipeTypeFour(float length, float diameter, PipeGrade grade, boolean chemResist)
+    public PipeTypeFour(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter,grade, chemResist);
         this._pipeType = 4;

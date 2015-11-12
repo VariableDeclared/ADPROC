@@ -44,6 +44,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private ArrayList<String[]> stringTable;
     private String [] columnNames ;
     private LinkedList<PipeModel> modelList;
+    private double runningTotal = 0;
 
     public PipesRUsGUI()
     {
@@ -98,6 +99,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
         this.setSize((int) Math.floor(userWindow.width * 0.8),
                 (int) Math.floor(userWindow.height * 0.8));
+        
+        
 
     }
 
@@ -177,6 +180,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     
                 case "Add":
                     modelList.add(this.tryUpdateModel()); //append to linkedList
+                    runningTotal += this.tryUpdateModel().getPrice(); //add price to order total
+                    
                     DefaultTableModel table = (DefaultTableModel)this.summaryTable.getModel();
                     table.addRow(new Object[]{
                                               this.tryUpdateModel().getPipeGrade(),
@@ -186,6 +191,9 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                                               this.tryUpdateModel().getLength(),
                                               this.tryUpdateModel().getPrice()
                                               });
+                    
+                    table.setValueAt(this.runningTotal, 0, 5); //sets the 'Total' cell to the sum of all pipe prices
+                    
                     break;
                     
                 case "Submit":

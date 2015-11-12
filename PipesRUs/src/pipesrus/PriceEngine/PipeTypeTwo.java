@@ -11,7 +11,7 @@ package pipesrus.PriceEngine;
  */
 public class PipeTypeTwo extends PipeTypeOne
 {
-    public PipeTypeTwo(float length, float diameter, PipeGrade grade, boolean chemResist)
+    public PipeTypeTwo(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter,grade, chemResist);
         this._colour = PipeColour.ONE_COLOUR;

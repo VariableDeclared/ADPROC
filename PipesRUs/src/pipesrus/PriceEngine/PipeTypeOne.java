@@ -15,7 +15,7 @@ import java.util.Set;
 public class PipeTypeOne extends Pipe
 {
     
-    public PipeTypeOne(float length, float diameter, PipeGrade grade, boolean chemResist)
+    public PipeTypeOne(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter, grade, chemResist);
         this._colour = PipeColour.NO_COLOUR;

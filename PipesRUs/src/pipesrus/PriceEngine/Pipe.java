@@ -14,8 +14,6 @@ import java.util.HashSet;
 abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe 
 {
     private static final double METERSPERINCH  =  0.0254;
-    
-    //private float _price;
 
     protected PipeGrade _ePipeGrade;
 
@@ -25,8 +23,9 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
     
     private boolean chemicalResistance;   
 
-    private final float length, diameter;
-    public Pipe(float length, float diameter, PipeGrade grade, boolean chemResist)
+    private final double length, diameter;
+    
+    public Pipe(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         this._ePipeGrade = grade;
         this.chemicalResistance = chemResist;
