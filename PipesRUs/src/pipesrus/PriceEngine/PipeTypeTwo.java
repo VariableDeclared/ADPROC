@@ -18,6 +18,7 @@ public class PipeTypeTwo extends PipeTypeOne
      * @param grade What pipe grade it is
      * @param chemResist Whether or not the pipe is chemically resisted
      */
+
     public PipeTypeTwo(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter,grade, chemResist);
