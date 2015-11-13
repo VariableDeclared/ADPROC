@@ -32,7 +32,7 @@ public class PipeTypeThree extends PipeTypeTwo
      * @return a double stating the value as pounds
      */
     @Override
-    public double getPrice()
+    public Double getPrice()
     {
         double price = super.getPrice();
         //colour

@@ -41,7 +41,7 @@ public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
      * @return returns a double with the value of the pipe
      */
     @Override
-    public double getPrice()
+    public Double getPrice()
     {
         double price = super.getPrice();
         

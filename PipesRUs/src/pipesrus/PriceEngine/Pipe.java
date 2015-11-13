@@ -47,7 +47,7 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
      * Abstract method to be implemented by all subclasses
      * @return returns the price in pounds as a double
      */
-    public abstract double getPrice();
+    public abstract Double getPrice();
 
     /**
      * Gets and returns the PipeColour for this pipe

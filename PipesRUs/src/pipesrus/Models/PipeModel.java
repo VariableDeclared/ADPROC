@@ -59,75 +59,14 @@ public class PipeModel extends Model {
     {
         return this.pipeColour;
     }
-    
-//    public double getPrice()
-//    {
-//        double price = 0;
-//        double additionalCostPercentage = 1;    //1 = 100% ie no extra
-//        
-//        if(this.reinforced)
-//        {
-//            additionalCostPercentage += 0.15;   //extra 15%
-//        }
-//        
-//        if(this.insulated)
-//        {
-//            additionalCostPercentage += 0.14;  //extra 14%
-//        } 
-//        
-//        if(this.chemicalResistance)
-//        {
-//            additionalCostPercentage += 0.12;   //extra 12%
-//        }
-//        
-//        if(this.pipeColour == PipeColour.ONE_COLOUR)
-//        {
-//            additionalCostPercentage += 0.12;
-//        }
-//        
-//         if(this.pipeColour == PipeColour.TWO_COLOURS)
-//        {
-//            additionalCostPercentage += 0.17;
-//        }
-//        
-//         switch(this.pipeGrade)
-//         {
-//             case ONE:
-//                 price = 30 * this.getVoloume();
-//                 break;
-//                 
-//            case TWO:
-//                 price = 32 * this.getVoloume();
-//                 break;
-//            
-//            case THREE:
-//                 price = 35 * this.getVoloume();
-//                 break;
-//            
-//            case FOUR:
-//                 price = 40 * this.getVoloume();
-//                 break;
-//            
-//            case FIVE:
-//                 price = 46 * this.getVoloume();
-//                 break;
-//              
-//            default:
-//                break;
-//         }
-//         double total = price * additionalCostPercentage;
-//         
-//        System.out.println("Price:" + total);
-//        return total / 100; //put into £
-//    }
-//    public void setPipe(Pipe pipe)
-//    {
-//        this._pipe = pipe;
-//    }
-//    public Pipe getPipe()
-//    {
-//        return this._pipe;
-//    }
+    public void setValue(double val)
+    {
+        this.price = val;
+    }
+    public double getValue()
+    {
+        return this.price;
+    }
     public PipeGrade getPipeGrade()
     {
         return this.pipeGrade;

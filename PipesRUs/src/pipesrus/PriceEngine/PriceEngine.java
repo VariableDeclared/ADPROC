@@ -23,11 +23,12 @@ public class PriceEngine {
 
     private Pipe processTypeThreeToFive(PipeModel model, boolean chemResistance)
     {
-        if (model.getPipeGrade() != PipeGrade.ONE) {
+        if (model.getPipeGrade() == PipeGrade.ONE)
+        {
             return null;
         }
 
-        if (!model.getInsulated()) {
+        if (!model.getInsulated() && !model.getReinforced()) {
             return new PipeTypeThree(model.getLength(),
                     model.getDiameter(),
                     model.getPipeGrade(),
@@ -52,7 +53,10 @@ public class PriceEngine {
 
         return null;
     }
-
+    private void throwPipeConfigError() throws PipeConfigurationNotSupportedException
+    {
+        throw new PipeConfigurationNotSupportedException("There is no pipe for that configuration");
+    }
     public Pipe getPipeForModel(PipeModel model) throws Exception
     {
         Pipe pipeToUse = null;
@@ -68,16 +72,24 @@ public class PriceEngine {
         switch (model.getPipeColour()) {
 
             case NO_COLOUR: //Type 1
-                if (!(grade == PipeGrade.FOUR || grade == PipeGrade.FOUR //Need to correct this logic
-                        || insulated || reinforced)) {
+                if (grade == PipeGrade.FOUR || grade == PipeGrade.FIVE || insulated || reinforced) 
+                {
+                    throwPipeConfigError();
+                }
+                else
+                {
                     pipeToUse = new PipeTypeOne(model.getLength(), model.getDiameter(),
                             model.getPipeGrade(), chemResistance);
                 }
                 break;
 
             case ONE_COLOUR: //Type 2
-                if (!(insulated || reinforced
-                        || grade == PipeGrade.ONE || grade == PipeGrade.FIVE)) {
+                if (grade == PipeGrade.ONE || grade == PipeGrade.FIVE || insulated || reinforced) 
+                {
+                    throwPipeConfigError();
+                }
+                else
+                {
                     pipeToUse = new PipeTypeTwo(model.getLength(), model.getDiameter(),
                             model.getPipeGrade(), chemResistance);
                 }
@@ -85,6 +97,8 @@ public class PriceEngine {
 
             case TWO_COLOURS://Type 3, 4 ,5
                 pipeToUse = processTypeThreeToFive(model, chemResistance);
+                if (pipeToUse == null)
+                        throwPipeConfigError();
                 break;
 
             default:

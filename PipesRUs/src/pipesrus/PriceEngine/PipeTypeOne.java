@@ -43,7 +43,7 @@ public class PipeTypeOne extends Pipe
      * @return a double stating the value as pounds
      */
     @Override
-    public double getPrice()
+    public Double getPrice()
     {
         this._priceForPlastic = this.getVolume() * this._ePipeGrade.getPrice();
         double price = this._priceForPlastic;
