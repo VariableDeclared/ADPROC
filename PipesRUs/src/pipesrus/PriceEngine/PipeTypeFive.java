@@ -41,12 +41,12 @@ public class PipeTypeFive extends PipeTypeFour implements IOuterReinforcedPipe
      * @return a double stating the value as pounds
      */
     @Override
-    public double getPrice()
+    public Double getPrice()
     {
         double price = super.getPrice();
         
         //outer reinforcement
-        price *= 1.15;
+        price += this._priceForPlastic * 1.15;
         
         return price;
         

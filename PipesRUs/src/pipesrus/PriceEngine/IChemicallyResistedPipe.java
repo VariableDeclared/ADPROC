@@ -12,5 +12,5 @@ package pipesrus.PriceEngine;
 public interface IChemicallyResistedPipe 
 {   
     public boolean getChemicalResistance();
-    public void setChemicalResistance(boolean resistance);
+   // public void setChemicalResistance(boolean resistance);
 }

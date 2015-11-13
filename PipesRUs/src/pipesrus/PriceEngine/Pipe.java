@@ -19,6 +19,7 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
 
     protected PipeColour _colour;
 
+    protected double _priceForPlastic;
     protected PipeType _pipeType;
     
     private boolean chemicalResistance;   
@@ -46,7 +47,7 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
      * Abstract method to be implemented by all subclasses
      * @return returns the price in pounds as a double
      */
-    public abstract double getPrice();
+    public abstract Double getPrice();
 
     /**
      * Gets and returns the PipeColour for this pipe
@@ -93,7 +94,7 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
     
     public double getVolume()
     {
-        return (Math.PI*Math.pow(inchToMetres(this.diameter)/2, 2))*this.length;
+        return Math.PI*Math.pow(inchToMetres(this.diameter)/2, 2)*this.length;
     }
     /**
      * Gets and returns the chemical resistance as  a boolean
@@ -108,9 +109,9 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
      * Sets whether the pipe is chemically resisted or not
      * @param chemRes a  boolean stating whether the pipe is insulated or not
      */
-    @Override
-    public void setChemicalResistance(boolean chemRes)
-    {
-        this.chemicalResistance = chemRes;
-    }
+//    @Override
+//    public void setChemicalResistance(boolean chemRes)
+//    {
+//        this.chemicalResistance = chemRes;
+//    }
 }

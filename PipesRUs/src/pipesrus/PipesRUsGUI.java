@@ -18,6 +18,8 @@ import pipesrus.PriceEngine.*;
 import javax.swing.table.*;
 import java.io.*;
 import pipesrus.misc.*;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  *
@@ -41,48 +43,41 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private JPanel informationTab, paymentTab;
     private PriceEngine engine;
     private JTable summaryTable;
-
-    private ArrayList<String[]> stringTable;
-    private String [] columnNames ;
-    private LinkedList<PipeModel> modelList;
-    private double runningTotal = 0;
+    private DefaultTableModel tableModel;
+    private LinkedList<Pipe> modelList;
+    private Double runningTotal = 0.0;
 
     public PipesRUsGUI()
     {
 
         super();
-        try
-        {
+        try {
             File icon = new File("pipe.ico");
             this.setIconImage(ImageIO.read(icon));
             //*INITMENUBAR* must be called before altering other GUI stuff
             initMenuBar();
 
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             swallowError(ex);
         }
 
-        this.stringTable = new ArrayList<>(25);
-        this.columnNames = new String[]{"Pipe Grade", "Total Length", "Total Value"}; // redundant
-        
         this.engine = new PriceEngine();
         this.components = new HashMap<>();
-        
+
         this.informationTab = new JPanel();
         this.paymentTab = new JPanel(new BorderLayout());
-        
+
         this.mainInterface = new JTabbedPane();
         this.mainInterface.addTab("Information", this.informationTab);
         this.mainInterface.addTab("Order Summary", this.paymentTab);
-        
+
         this.informationTab.setLayout(new FlowLayout());
-        
-        this.modelList = new LinkedList<PipeModel>(); //for storing each model
+
+        this.modelList = new LinkedList<>(); //for storing each model
 
         //lock the user to one tab.
-       // this.mainInterface.setEnabledAt(1, false);
+        this.mainInterface.setEnabledAt(1, false);
         this.add(mainInterface);
         this.setTitle("Pipes R Us");
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
@@ -101,8 +96,6 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
         this.setSize((int) Math.floor(userWindow.width * 0.8),
                 (int) Math.floor(userWindow.height * 0.8));
-        
-        
 
     }
 
@@ -129,21 +122,15 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private void processKey(KeyEvent e)
     {
         JTextField source = (JTextField) e.getSource();
-        try
-        {
+        try {
             Double test = Double.valueOf(source.getText());
-            System.out.println(test);
-        } catch (Exception ex)
-        {
-            System.out.println("except");
+        } catch (Exception ex) {
             this.components.get("Add").setEnabled(false);
+            return;
         }
-        if (source.getText().isEmpty())
-        {
+        if (source.getText().isEmpty()) {
             this.components.get("Add").setEnabled(false);
-        } 
-        else
-        {
+        } else {
             this.components.get("Add").setEnabled(true);
         }
 
@@ -160,7 +147,27 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     {
         processKey(e);
     }
-
+    private String writeStringToFile(String textToWrite) throws Exception
+    {
+        System.out.println("Writing to file");
+        Calendar cal = Calendar.getInstance();
+        String filename = cal.get(Calendar.DAY_OF_MONTH) + cal.get(Calendar.MONTH)
+                + cal.get(Calendar.YEAR)+ "-" + UUID.randomUUID().toString()+".txt";
+        File textFile = new File(filename);
+        textFile.createNewFile();
+        if(!textFile.canWrite())
+        {
+            throw new Exception("Cannot write to text file");
+        }
+        FileWriter fw = new FileWriter(textFile.getAbsoluteFile());
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.write(textToWrite, 0, textToWrite.length());
+        bw.close();
+        fw.close();
+        
+        return filename;
+        
+    }
     /**
      *
      * @param evnt
@@ -168,58 +175,97 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     @Override
     public synchronized void actionPerformed(ActionEvent evnt)
     {
-        try
-        {
-            
+        try {
+
             //main event handler
-            
-            switch (evnt.getActionCommand())
-            {
+            switch (evnt.getActionCommand()) {
                 case "Exit":
                     //terminate gracefully
                     System.exit(0);
                     break;
-                    
+
                 case "Add":
-                    modelList.add(this.tryUpdateModel()); //append to linkedList
-                    runningTotal += this.tryUpdateModel().getPrice(); //add price to order total
+                    PipeModel model = this.tryUpdateModel();
+                     //append to linkedList
                     
-                    DefaultTableModel table = (DefaultTableModel)this.summaryTable.getModel();
-                    table.addRow(new Object[]{
-                                              this.tryUpdateModel().getPipeGrade(),
-                                              this.tryUpdateModel().getPipeColour(),
-                                              this.tryUpdateModel().getInsulated(),
-                                              this.tryUpdateModel().getReinforced(),
-                                              this.tryUpdateModel().getLength(),
-                                              this.tryUpdateModel().getPrice()
-                                              });
+                    updateRunningTotal(model.getValue()); //add price to order total
+                    double value = new BigDecimal(model.getValue()).setScale(2, RoundingMode.HALF_UP).doubleValue();
                     
-                    table.setValueAt(this.runningTotal, 0, 5); //sets the 'Total' cell to the sum of all pipe prices
+
+                    this.tableModel.addRow(new Object[]{
+                        model.getPipeGrade(),
+                        model.getPipeColour(),
+                        model.getInsulated(),
+                        model.getReinforced(),
+                        model.getLength(),
+                        "£"+value
+                    });
+
                     
+
                     break;
-                    
+
                 case "Submit":
-                  
-                    if (modelList.size() == 0)
-                    {
-                        throw new Exception("Model is empty after trying to update");
+
+                    if (modelList.size() == 0) {
+                        throw new Exception("No pipes added to order");
                     }
 
-                  
-                      System.out.println("Size: " + modelList.size()); //debug 
+//                    System.out.println("Size: " + modelList.size()); //debug 
+//
+//                    System.out.println("Going to quote");
+                    //move the user to the order tab
+                    this.mainInterface.setSelectedIndex(1);
+                    this.mainInterface.setEnabledAt(1, true);
+                    break;
+                case "Remove last pipe":
+                    if(modelList.size() == 0)
+                    {
+                        JOptionPane.showMessageDialog(this, "No pipes to remove");
+                        break;
+                    }
+                    Pipe removedPipe = (Pipe) this.modelList.removeLast();
+                    ((DefaultTableModel)this.summaryTable.getModel()).removeRow(modelList.size()+1);
+                    //minus is important here
+                    updateRunningTotal(-removedPipe.getPrice());
+                    break;
+                case "Clear order":
+                    for(int i = 0; i < this.modelList.size(); i++)
+                    {
+                        this.tableModel.removeRow(i+1);
+                        updateRunningTotal(-this.runningTotal);
+                    }
                     
-                    System.out.println("Going to quote");
-                    this.engine.getQuote(modelList, this); 
-
+                    this.modelList.clear();
+                    this.mainInterface.setSelectedIndex(0);
+                    this.mainInterface.setEnabledAt(1, false);
+                    break;
+                case "Write to file":
+                    String textToFile = "";
+                    for(int row = 0; row < this.tableModel.getRowCount(); row++)
+                    {
+                        for(int col = 0; col < this.tableModel.getColumnCount(); col++)
+                        {
+                            System.out.println(textToFile);
+                            textToFile += " " + this.tableModel.getValueAt(row, col);
+                            
+                        }
+                        textToFile += "\n";
+                    }
+                    JOptionPane.showMessageDialog(this,writeStringToFile(textToFile));
+                    break;
                 default:
                     break;
             }
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             swallowError(ex);
         }
     }
-
+    private void updateRunningTotal(double value)
+    {
+        this.runningTotal += new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        this.tableModel.setValueAt("£"+ this.runningTotal, 0, 5); //sets the 'Total' cell to the sum of all pipe prices
+    }
     private JButton createAndReturnJButtonWithName(String name)
     {
         JButton newButton = new JButton(name);
@@ -227,35 +273,29 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         return newButton;
     }
 
-    private JPanel createAndReturnJPanel()
-    {
-        JPanel newPanel = new JPanel(new FlowLayout());
-        return newPanel;
-    }
-//
-//    private void addToPanel(JPanel panel, AbstractButton[] items) {
-//        for (AbstractButton button : items) {
-//            this.components.put("Radio button " + button.getText(), button);
-//            panel.add(button);
-//        }
-//    }
-
     private void initOrderScreen()
     {
-//        JTextArea informationScreen = new JTextArea();
-//        this.paymentTab.add(informationScreen);
-//        informationScreen.setText("Order not yet completed");
-        this.summaryTable = new PipesRUsTable(new PipesRUsTableModel(new String[][]{{"", "", "", "", "", "£0.00"}}, 
+        this.summaryTable = new PipesRUsTable(new PipesRUsTableModel(new String[][]{{"", "", "", "", "", "£0.00"}},
                 new String[]{"Pipe Grade", "Colour", "Inner Insulation", "Outer Reinforcement", "Total Length", "Total Value"}));
 
-        
         System.out.println("Setting table model");
-        
+
         this.summaryTable.setColumnSelectionAllowed(false);
         JPanel orderPanel = new JPanel(new BorderLayout());
+        JPanel orderButtons = new JPanel(new FlowLayout());
+        
         orderPanel.setBorder(BorderFactory.createTitledBorder("Order Summary"));
+        orderButtons.setBorder(BorderFactory.createTitledBorder("Controls"));
+        
         orderPanel.add(new JScrollPane(this.summaryTable), BorderLayout.CENTER);
+        orderButtons.add(createAndReturnJButtonWithName("Remove last pipe"));
+        orderButtons.add(createAndReturnJButtonWithName("Clear order"));
+        orderButtons.add(createAndReturnJButtonWithName("Write to file"));
+        
+        
+        this.paymentTab.add(orderButtons, BorderLayout.SOUTH);
         this.paymentTab.add(orderPanel, BorderLayout.CENTER);
+        this.tableModel = (DefaultTableModel) this.summaryTable.getModel();
     }
 
     private AbstractButton addDefaultActionListener(AbstractButton btn)
@@ -264,12 +304,6 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         return btn;
     }
 
-//    private JCheckBox createAndReturnJCheckBoxWithName(String name) {
-//        JCheckBox newButton = new JCheckBox(name);
-//        newButton.setName(name);
-//        addDefaultActionListener(newButton);
-//        return newButton;
-//    }
     private JMenuItem createMenuItemWithName(String name, ActionListener listener)
     {
         JMenuItem item = new JMenuItem(name);
@@ -278,12 +312,6 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         return item;
     }
 
-//    private JComponent createJToggleButtonWithName(String name) {
-//        JToggleButton newButton = new JToggleButton(name);
-//        newButton.setName(name);
-//        addDefaultActionListener(newButton);
-//        return newButton;
-//    }
     private void initMenuBar()
     {
         JMenuBar mainMenu = new JMenuBar();
@@ -312,22 +340,26 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
     public PipeModel tryUpdateModel()
     {
-        PipeColour colour = PipeColour.valueOf(evaluateAsComboBox("Pipe Colour"));
-        PipeGrade grade = PipeGrade.valueOf(evaluateAsComboBox("Pipe Grade"));
-        Boolean chemicalResistance = evaluateAsRadioButton("Chemical Resistance");
-        Boolean insulated = evaluateAsRadioButton("Insulated");
-        Boolean reinforced = evaluateAsRadioButton("Reinforced");
-        Double length = Double.valueOf(evaluateAsTextbox("Length"));
-        Double diameter = Double.valueOf(evaluateAsTextbox("Diameter"));
-//        System.out.println(colour);
-//        System.out.println(grade);
-//        System.out.println(chemicalResistance);
-//        System.out.println(insulated);
-//        System.out.println(reinforced);
-//        System.out.println(length);
-//        System.out.println(diameter);
-        return new PipeModel(insulated, reinforced, chemicalResistance,
-                grade, colour, length, diameter);
+        try {
+            PipeColour colour = PipeColour.valueOf(evaluateAsComboBox("Pipe Colour"));
+            PipeGrade grade = PipeGrade.valueOf(evaluateAsComboBox("Pipe Grade"));
+            Boolean chemicalResistance = evaluateAsRadioButton("Chemical Resistance");
+            Boolean insulated = evaluateAsRadioButton("Insulated");
+            Boolean reinforced = evaluateAsRadioButton("Reinforced");
+            Double length = Double.valueOf(evaluateAsTextbox("Length"));
+            Double diameter = Double.valueOf(evaluateAsTextbox("Diameter"));
+            PipeModel model = new PipeModel(insulated, reinforced, chemicalResistance,
+                    grade, colour, length, diameter);
+            Pipe pipe = this.engine.getPipeForModel(model);
+            double value = pipe.getPrice();
+            model.setValue(value);
+            modelList.add(pipe);
+            return model;
+        } catch (Exception ex) {
+            swallowError(ex);
+            this.components.get("Submit").setEnabled(false);
+            return null;
+        }
 
     }
 
@@ -336,21 +368,12 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     {
         this.mainInterface.setEnabledAt(1, true);
         this.mainInterface.setSelectedIndex(1);
-        JTextArea information = (JTextArea) this.paymentTab.getComponent(0);
-        StringBuilder output = new StringBuilder();
-        output.append("------------------------- \n");
-        output.append("Price: " + model.getTotalCost() + "\n");
-       // output.append(" Pipe: " + model.getPipes().getGrade() + "\n");
-        output.append(" Volume: " + model.getTotalPipe() + "\n");
-        information.setText(output.toString());
-
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     private void swallowError(Exception ex)
     {
         //improve this at a later date.
-        JOptionPane.showMessageDialog(this, "Something went wrong", "Error", JOptionPane.OK_OPTION);
+        JOptionPane.showMessageDialog(this, "Something went wrong \n" + ex.getMessage(), "Error", JOptionPane.OK_OPTION);
 
     }
 
@@ -365,39 +388,19 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         this.mainInterface.setSelectedIndex(0);
     }
 
-    private void openTableWindow(Object[][] table)
-    {
-        StandardGUI tableWindow = new StandardGUI("Order Summary");
-        JTable orderTable = new JTable(table,
-                new String[]
-                {
-                    "Order Num", "Length", "Total Value"
-                });
-        JPanel tableContainer = new JPanel();
-        tableContainer.setBorder(BorderFactory.createTitledBorder("Order Summary"));
-        tableContainer.setLayout(new BorderLayout());
-        tableContainer.add(orderTable, BorderLayout.CENTER);
-        tableWindow.add(tableContainer);
-        tableWindow.setVisible(true);
-    }
-
     private String parseWords(String toParse)
     {
         toParse = toParse.replace("get", "");
         toParse = toParse.replace("_", " ");
         StringBuilder returnString = new StringBuilder();
-        for (char c : toParse.toCharArray())
-        {
-            String sqChar = new String(new char[]
-            {
+        for (char c : toParse.toCharArray()) {
+            String sqChar = new String(new char[]{
                 c
             });
-            if (sqChar.equals(sqChar.toUpperCase()) && toParse.indexOf(c) != 0)
-            {
+            if (sqChar.equals(sqChar.toUpperCase()) && toParse.indexOf(c) != 0) {
                 returnString.append(" ");
                 returnString.append(sqChar);
-            } else
-            {
+            } else {
                 returnString.append(c);
             }
         }
@@ -407,8 +410,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private boolean ignoreMethod(String humanName)
     {
         boolean returnval = false;
-        switch (humanName.toLowerCase())
-        {
+        switch (humanName.toLowerCase()) {
             case "equals":
             case "notify":
             case "hash code":
@@ -416,9 +418,10 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             case "notify all":
             case "class":
             case "to string":
-            case "voloume":           
-            case "voolume":            
+            case "voloume":
+            case "voolume":
             case "price":
+            case "value":
 
                 returnval = true;
                 break;
@@ -440,36 +443,34 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
         leftPanel = new JPanel(new FlowLayout());
         this.informationTab.add(leftPanel, BorderLayout.LINE_START);
+        leftPanel.setBorder(BorderFactory.createTitledBorder("Value Entry"));
         rightPanel = new JPanel(new FlowLayout());
+        rightPanel.setBorder(BorderFactory.createTitledBorder("Attributes"));
         this.informationTab.add(rightPanel, BorderLayout.LINE_END);
         centrePanel = new JPanel(new FlowLayout());
+        centrePanel.setBorder(BorderFactory.createTitledBorder("Materials"));
         this.informationTab.add(centrePanel, BorderLayout.CENTER);
         southPanel = new JPanel(new FlowLayout());
         this.informationTab.add(southPanel, BorderLayout.SOUTH);
-        try
-        {
+        try {
 
             Class<?> specificModel = Class.forName(model.getClass().getName());
 
             Method[] members = specificModel.getMethods();
             JComponent newComponent = null;
-            for (Method member : members)
-            {
+            for (Method member : members) {
                 String memberHumanName = parseWords(member.getName());
                 Class<?> memberType = member.getReturnType();
-                if (this.ignoreMethod(memberHumanName))
-                {
+                if (this.ignoreMethod(memberHumanName)) {
                     continue;
                 }
 
                 //if type is boolean then create a RadioButton, grouped.
-                if (memberType.getTypeName().equals(Boolean.class.getTypeName()))
-                {
+                if (memberType.getTypeName().equals(Boolean.class.getTypeName())) {
                     newComponent = new JCheckBox(memberHumanName);
                     rightPanel.add(newComponent);
                 } //if enum then just create a textbox.
-                if (memberType.isEnum())
-                {
+                if (memberType.isEnum()) {
                     JPanel enclosingPanel = new JPanel();
                     enclosingPanel.add(new JLabel(member.getName()));
 
@@ -479,16 +480,14 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     centrePanel.add(newComponent);
                 }
 
-                if (memberType.getTypeName().equals(double.class.getName()))
-                {
+                if (memberType.getTypeName().equals(double.class.getName())) {
                     newComponent = new JTextField(memberHumanName);
                     newComponent.addKeyListener(this);
                     leftPanel.add(new JLabel(memberHumanName + ":"));
                     leftPanel.add(newComponent);
                 }
 
-                if (newComponent != null)
-                {
+                if (newComponent != null) {
 //                    System.out.println("Added text field for: " + memberHumanName);
 //                    this.informationTab.add(newComponent);
 //                    this.components.put(memberHumanName, newComponent);
@@ -497,25 +496,22 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
             }
 
-        } catch (ClassNotFoundException ex)
-        {
+        } catch (ClassNotFoundException ex) {
             swallowError(ex, "Class not found");
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             swallowError(ex);
         }
-        
-        JButton go = new JButton("Add");
-        go.addActionListener(this);
-        go.setEnabled(true);
-        this.components.put("Add", go);
-        southPanel.add(go);
-        
-        JButton submit = new JButton("Submit");
-        submit.addActionListener(this);
+
+        JButton add = createAndReturnJButtonWithName("Add");
+        add.setEnabled(false);
+        this.components.put("Add", add);
+        southPanel.add(add);
+
+        JButton submit = createAndReturnJButtonWithName("Submit");
         submit.setEnabled(true);
         this.components.put("Submit", submit);
         southPanel.add(submit);
+        southPanel.setBorder(BorderFactory.createTitledBorder("Controls"));
     }
 
 }
