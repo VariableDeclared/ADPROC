@@ -37,7 +37,24 @@ public class PipeTypeOne extends Pipe
     {
         return this._colour;
     }
+    private double getPriceForColour()
+    {
+        switch(this._colour)
+        {
+            case ONE_COLOUR:
+                return this._priceForPlastic * 1.12;
 
+            case TWO_COLOURS:
+                return this._priceForPlastic * 1.17;
+            case NO_COLOUR:
+                return 0;
+            default:
+                //Should be impossible.
+                break;
+        }
+        //should be impossible.
+        return 0;
+    }
     /**
      * Gets the value in pounds for this pipe
      * @return a double stating the value as pounds
@@ -51,7 +68,7 @@ public class PipeTypeOne extends Pipe
         {
            price = this._priceForPlastic * 1.12;
         }
-        System.out.println("Hello: + " +price);
+        price += getPriceForColour();
         return price;
 
     }

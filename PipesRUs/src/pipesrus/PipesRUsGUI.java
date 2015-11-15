@@ -252,7 +252,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                         }
                         textToFile += "\n";
                     }
-                    JOptionPane.showMessageDialog(this,writeStringToFile(textToFile));
+                    JOptionPane.showMessageDialog(this,"File name: "+ writeStringToFile(textToFile));
                     break;
                 default:
                     break;
@@ -488,9 +488,6 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                 }
 
                 if (newComponent != null) {
-//                    System.out.println("Added text field for: " + memberHumanName);
-//                    this.informationTab.add(newComponent);
-//                    this.components.put(memberHumanName, newComponent);
                     this.components.put(memberHumanName, newComponent);
                 }
 
