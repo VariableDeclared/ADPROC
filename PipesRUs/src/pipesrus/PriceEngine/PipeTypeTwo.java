@@ -34,8 +34,7 @@ public class PipeTypeTwo extends PipeTypeOne
     public Double getPrice()
     {
         double price = super.getPrice();
-        //colour
-        price += this._priceForPlastic * 1.12;
+        
         return price;
     }
 }
