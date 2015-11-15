@@ -51,7 +51,7 @@ public class PipeTypeOne extends Pipe
         {
            price = this._priceForPlastic * 1.12;
         }
-        System.out.println("Hello: + " +price);
+
         return price;
 
     }

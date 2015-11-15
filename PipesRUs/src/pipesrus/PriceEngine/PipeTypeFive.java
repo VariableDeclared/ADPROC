@@ -10,7 +10,7 @@ package pipesrus.PriceEngine;
  * @author UP738106
  * 
  */
-public class PipeTypeFive extends PipeTypeFour implements IOuterReinforcedPipe
+public class PipeTypeFive extends Pipe implements IOuterReinforcedPipe
 {
     private final boolean outerReinforced = true;
 
@@ -43,8 +43,16 @@ public class PipeTypeFive extends PipeTypeFour implements IOuterReinforcedPipe
     @Override
     public Double getPrice()
     {
-        double price = super.getPrice();
-        
+        this._priceForPlastic = this.getVolume() * this._ePipeGrade.getPrice();
+        double price = this._priceForPlastic;
+        if(this.getChemicalResistance())
+        {
+           price = this._priceForPlastic * 1.12;
+        }
+        //two colours
+        price += this._priceForPlastic * 1.14;
+        //insulation
+        price += this._priceForPlastic * 1.17;
         //outer reinforcement
         price += this._priceForPlastic * 1.15;
         

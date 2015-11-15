@@ -9,7 +9,7 @@ package pipesrus.PriceEngine;
  *
  * @author UP738106
  */
-public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
+public class PipeTypeFour extends Pipe implements IInsulatedPipe
 {
     private final boolean insulated = true;
 
@@ -43,9 +43,14 @@ public class PipeTypeFour extends PipeTypeThree implements IInsulatedPipe
     @Override
     public Double getPrice()
     {
-        double price = super.getPrice();
-        
-        
+        this._priceForPlastic = this.getVolume() * this._ePipeGrade.getPrice();
+        double price = this._priceForPlastic;
+        if(this.getChemicalResistance())
+        {
+           price = this._priceForPlastic * 1.12;
+        }
+        //two colour
+        price += this._priceForPlastic * 1.17;
         //insulation
         price += this._priceForPlastic * 1.14;
         return price;

@@ -9,7 +9,7 @@ package pipesrus.PriceEngine;
  *
  * @author UP738106
  */
-public class PipeTypeTwo extends PipeTypeOne
+public class PipeTypeTwo extends Pipe
 {
     /**
      * The constructor for this pipe, initialises with parameter values
@@ -33,7 +33,12 @@ public class PipeTypeTwo extends PipeTypeOne
     @Override
     public Double getPrice()
     {
-        double price = super.getPrice();
+        this._priceForPlastic = this.getVolume() * this._ePipeGrade.getPrice();
+        double price = this._priceForPlastic;
+        if(this.getChemicalResistance())
+        {
+           price = this._priceForPlastic * 1.12;
+        }
         //colour
         price += this._priceForPlastic * 1.12;
         return price;
