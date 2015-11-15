@@ -33,8 +33,6 @@ public class PipeTypeTwo extends PipeTypeOne
     @Override
     public Double getPrice()
     {
-        double price = super.getPrice();
-        
-        return price;
+        return super.getPrice();
     }
 }
