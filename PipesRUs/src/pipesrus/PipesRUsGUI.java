@@ -52,8 +52,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
         super();
         try {
-            File icon = new File("pipe.ico");
-            this.setIconImage(ImageIO.read(icon));
+
+            
             //*INITMENUBAR* must be called before altering other GUI stuff
             initMenuBar();
 
@@ -83,16 +83,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        //////////////////////////////////// exp ////////////////////////
-//        Object [][] tableArray =
-//                new String[][]{{"Hell","O", "O"}, {"Hell","O", "O"}, {"Row Three", "F", "F"}};
-//        
-//        openTableWindow(tableArray);
-        //////////////////////////////////////// exp //////////////////////
-        //throw new UnsupportedOperationException("Not yet implemented");
         initInformationScreenWithModel(new PipeModel());
         initOrderScreen();
-        //initInterface();
 
         this.setSize((int) Math.floor(userWindow.width * 0.8),
                 (int) Math.floor(userWindow.height * 0.8));

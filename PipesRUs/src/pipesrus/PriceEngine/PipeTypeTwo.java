@@ -26,13 +26,4 @@ public class PipeTypeTwo extends PipeTypeOne
         this._pipeType = PipeType.TWO;
     }
 
-    /**
-     * Gets the value in pounds for this pipe
-     * @return a double stating the value as pounds
-     */
-    @Override
-    public Double getPrice()
-    {
-        return super.getPrice();
-    }
 }

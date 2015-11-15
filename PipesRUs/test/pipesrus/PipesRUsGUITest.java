@@ -52,17 +52,6 @@ public class PipesRUsGUITest {
         fail("The test case is a prototype.");
     }
 
-    /**
-     * Test of tryUpdateModel method, of class PipesRUsGUI.
-     */
-    @Test
-    public void testTryUpdateModel() {
-        System.out.println("tryUpdateModel");
-        PipeModel pipe = null;
-        PipesRUsGUI instance = new PipesRUsGUI();
-        instance.tryUpdateModel(pipe);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+
     
 }

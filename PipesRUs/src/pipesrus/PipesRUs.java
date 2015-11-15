@@ -5,6 +5,7 @@
  */
 package pipesrus;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,7 +21,9 @@ public class PipesRUs {
         try {
             //Instiate the gui
             PipesRUsGUI gui = new PipesRUsGUI(0.5);
-
+            ImageIcon icon = new ImageIcon("pipe.jpg");
+            System.out.println(icon.getDescription());
+            gui.setIconImage(icon.getImage());
             gui.setVisible(true);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getClass().toString() + " "+ ex.getMessage());

@@ -26,15 +26,4 @@ public class PipeTypeThree extends PipeTypeTwo
         this._colour = PipeColour.TWO_COLOURS;
         this._pipeType = PipeType.THREE;
     }
-
-    /**
-     * Gets the value in pounds for this pipe
-     * @return a double stating the value as pounds
-     */
-    @Override
-    public Double getPrice()
-    {
-        return super.getPrice();
-        
-    }
 }
