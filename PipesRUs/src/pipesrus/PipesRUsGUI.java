@@ -157,11 +157,15 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         return filename;
 
     }
-
+    private void lockQuoteScreen()
+    {
+        this.mainInterface.setSelectedIndex(0);
+        this.mainInterface.setEnabledAt(1, false);
+    }
     private void noPipes()
     {
         JOptionPane.showMessageDialog(this, "No pipes to remove");
-
+        lockQuoteScreen();
     }
 
     /**
@@ -182,7 +186,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
                 case "Add":
                     PipeModel model = this.tryUpdateModel();
-                     //append to linkedList
+                    //append to linkedList
 
                     updateRunningTotal(model.getValue()); //add price to order total
                     double value = new BigDecimal(model.getValue()).setScale(2, RoundingMode.HALF_UP).doubleValue();
@@ -219,6 +223,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     ((DefaultTableModel) this.summaryTable.getModel()).removeRow(modelList.size() + 1);
                     //minus is important here
                     updateRunningTotal(-removedPipe.getPrice());
+                    if (modelList.size() == 0)
+                        lockQuoteScreen();
                     break;
                 case "Clear order":
                     if (this.modelList.size() == 0) {
@@ -226,14 +232,12 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     }
                     int size = modelList.size();
                     this.modelList.clear();
-                    
+
                     for (int index = size; index > 0; index--) {
                         this.tableModel.removeRow(index);
                         updateRunningTotal(-this.runningTotal);
                     }
-
-                    this.mainInterface.setSelectedIndex(0);
-                    this.mainInterface.setEnabledAt(1, false);
+                    lockQuoteScreen();    
                     break;
                 case "Write to file":
                     String textToFile = "";
@@ -256,7 +260,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     }
 
     private void updateRunningTotal(double value)
-    {   this.runningTotal += value;
+    {
+        this.runningTotal += value;
         this.runningTotal = new BigDecimal(runningTotal).setScale(2, RoundingMode.HALF_UP).doubleValue();
         this.tableModel.setValueAt("£" + this.runningTotal, 0, 5); //sets the 'Total' cell to the sum of all pipe prices
     }
