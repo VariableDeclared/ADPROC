@@ -94,9 +94,11 @@ abstract public class Pipe implements IChemicallyResistedPipe, IColouredPipe
     
     public double getVolume()
     {
-        double raduis = this.diameter*0.1/2;
+        double innerRaduis = this.diameter*0.9/2;
         double lengthInches = metresToInch(this.length);
-        return (Math.PI*Math.pow(raduis, 2))*lengthInches;
+        double outer = Math.PI*Math.pow(this.diameter/2, 2)*lengthInches;
+        double inner = Math.PI*Math.pow(innerRaduis, 2)*lengthInches;
+        return outer - inner;
     }
     /**
      * Gets and returns the chemical resistance as  a boolean

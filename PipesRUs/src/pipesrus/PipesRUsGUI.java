@@ -469,6 +469,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     enclosingPanel.add(new JLabel(member.getName()));
 
                     Object[] eMembers = memberType.getEnumConstants();
+                    centrePanel.add(new JLabel(memberHumanName + ":"));
                     newComponent = new JComboBox(eMembers);
                     enclosingPanel.add(newComponent);
                     centrePanel.add(newComponent);

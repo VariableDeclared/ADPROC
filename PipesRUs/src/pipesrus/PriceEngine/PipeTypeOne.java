@@ -21,7 +21,6 @@ public class PipeTypeOne extends Pipe
      * @param grade What pipe grade it is
      * @param chemResist Whether or not the pipe is chemically resisted
      */
-    
     public PipeTypeOne(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter, grade, chemResist);
@@ -54,8 +53,5 @@ public class PipeTypeOne extends Pipe
         return price;
 
     }
-//    public void setPipeColour(PipeColour pipeColour)
-//    {
-//         this._ePipeColour = pipeColour;
-//    }
+
 }
