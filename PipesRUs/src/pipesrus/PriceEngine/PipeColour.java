@@ -24,7 +24,7 @@ public enum PipeColour
      this.value = price; 
     }
     
-    private double getValue()
+    public double getValue()
     {
         return this.value;
     }
