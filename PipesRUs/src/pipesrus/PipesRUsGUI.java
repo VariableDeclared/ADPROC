@@ -187,7 +187,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                 case "Add":
                     PipeModel model = this.tryUpdateModel();
                     //append to linkedList
-
+                    if(model == null)
+                        break;
                     updateRunningTotal(model.getValue()); //add price to order total
                     double value = new BigDecimal(model.getValue()).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
@@ -356,7 +357,6 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             return model;
         } catch (Exception ex) {
             swallowError(ex);
-            this.components.get("Submit").setEnabled(false);
             return null;
         }
 
