@@ -37,18 +37,7 @@ public class PipeGradeTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of values method, of class PipeGrade.
-     */
-    @Test
-    public void testValues() {
-        System.out.println("values");
-        PipeGrade[] expResult = null;
-        PipeGrade[] result = PipeGrade.values();
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+
 
     /**
      * Test of valueOf method, of class PipeGrade.
@@ -56,12 +45,25 @@ public class PipeGradeTest {
     @Test
     public void testValueOf() {
         System.out.println("valueOf");
-        String name = "";
-        PipeGrade expResult = null;
+        String name = "ONE";
+        PipeGrade expResult = PipeGrade.ONE;
         PipeGrade result = PipeGrade.valueOf(name);
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+    }
+
+    /**
+     * Test of getPrice method, of class PipeGrade.
+     */
+    @Test
+    public void testGetPrice()
+    {
+        System.out.println("getPrice");
+        PipeGrade instance = PipeGrade.ONE;
+        double expResult = 0.3;
+        double result = instance.getPrice();
+        assertEquals(expResult, result, 0.0);
+
     }
     
 }

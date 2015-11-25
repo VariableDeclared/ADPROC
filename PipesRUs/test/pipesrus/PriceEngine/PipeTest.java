@@ -14,114 +14,131 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author UP732011
+ * @author 732011 <up732011@myport.ac.uk>
  */
 public class PipeTest {
     
-    public PipeTest() {
+    public PipeTest()
+    {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass()
+    {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass()
+    {
     }
     
     @Before
-    public void setUp() {
+    public void setUp()
+    {
     }
     
     @After
-    public void tearDown() {
+    public void tearDown()
+    {
     }
 
     /**
      * Test of getPrice method, of class Pipe.
      */
     @Test
-    public void testGetPrice() {
+    public void testGetPrice()
+    {
         System.out.println("getPrice");
-        Pipe instance = new PipeImpl();
-        float expResult = 0.0F;
-        float result = instance.getPrice();
-        assertEquals(expResult, result, 0.0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        Pipe instance = new PipeTypeOne(1,39, PipeGrade.THREE, false);
+        Double expResult = getVol(39,1) * 0.35;
+        Double result = instance.getPrice();
+        assertEquals(expResult, result);
+
     }
 
     /**
-     * Test of setPrice method, of class Pipe.
+     * Test of getPipeColour method, of class Pipe.
      */
     @Test
-    public void testSetPrice() {
-        System.out.println("setPrice");
-        float newPrice = 0.0F;
-        Pipe instance = new PipeImpl();
-        instance.setPrice(newPrice);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    public void testGetPipeColour()
+    {
+        System.out.println("getPipeColour");
+        Pipe instance = new PipeTypeOne(1,39, PipeGrade.THREE, false);
+        PipeColour expResult = PipeColour.NO_COLOUR;
+        PipeColour result = instance.getPipeColour();
+        assertEquals(expResult, result);
 
-    /**
-     * Test of setGrade method, of class Pipe.
-     */
-    @Test
-    public void testSetGrade() {
-        System.out.println("setGrade");
-        PipeGrade newGrade = null;
-        Pipe instance = new PipeImpl();
-        instance.setGrade(newGrade);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
      * Test of getGrade method, of class Pipe.
      */
     @Test
-    public void testGetGrade() {
+    public void testGetGrade()
+    {
         System.out.println("getGrade");
         Pipe instance = new PipeImpl();
-        PipeGrade expResult = null;
+        PipeGrade expResult = PipeGrade.ONE;
         PipeGrade result = instance.getGrade();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
     /**
      * Test of getType method, of class Pipe.
      */
     @Test
-    public void testGetType() {
+    public void testGetType()
+    {
         System.out.println("getType");
-        Pipe instance = new PipeImpl();
-        int expResult = 0;
-        int result = instance.getType();
+        Pipe instance = new PipeTypeOne(1,39, PipeGrade.THREE, false);
+        PipeType expResult = PipeType.ONE;
+        PipeType result = instance.getType();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+    }
+    private double getVol(double diameter, double length)
+    {
+        return Math.PI*Math.pow(diameter*0.9/2, 2)*length/0.0254;
+    }
+    /**
+     * Test of getVolume method, of class Pipe.
+     */
+    @Test
+    public void testGetVolume()
+    {
+        System.out.println("getVolume test");
+        Pipe instance = new PipeTypeOne(1,39, PipeGrade.THREE, false);
+        double expResult = getVol(39,1);
+        double result = instance.getVolume();
+        assertEquals(expResult, result, 0.0);
+        
     }
 
     /**
-     * Test of setType method, of class Pipe.
+     * Test of getChemicalResistance method, of class Pipe.
      */
     @Test
-    public void testSetType() {
-        System.out.println("setType");
-        int newType = 0;
+    public void testGetChemicalResistance()
+    {
+        System.out.println("getChemicalResistance");
         Pipe instance = new PipeImpl();
-        instance.setType(newType);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        boolean expResult = false;
+        boolean result = instance.getChemicalResistance();
+        assertEquals(expResult, result);
+
     }
 
     public class PipeImpl extends Pipe {
-        public void setChemicalResistance(boolean bool)
+
+        public PipeImpl()
         {
-            
+            super(0.0, 0.0, PipeGrade.ONE, false);
+        }
+
+        public Double getPrice()
+        {
+            return null;
         }
     }
     

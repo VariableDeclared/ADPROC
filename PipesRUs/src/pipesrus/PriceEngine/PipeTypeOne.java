@@ -21,7 +21,6 @@ public class PipeTypeOne extends Pipe
      * @param grade What pipe grade it is
      * @param chemResist Whether or not the pipe is chemically resisted
      */
-    
     public PipeTypeOne(double length, double diameter, PipeGrade grade, boolean chemResist)
     {
         super(length, diameter, grade, chemResist);
@@ -37,24 +36,6 @@ public class PipeTypeOne extends Pipe
     {
         return this._colour;
     }
-    private double getPriceForColour()
-    {
-        switch(this._colour)
-        {
-            case ONE_COLOUR:
-                return this._priceForPlastic * 1.12;
-
-            case TWO_COLOURS:
-                return this._priceForPlastic * 1.17;
-            case NO_COLOUR:
-                return 0;
-            default:
-                //Should be impossible.
-                break;
-        }
-        //should be impossible.
-        return 0;
-    }
     /**
      * Gets the value in pounds for this pipe
      * @return a double stating the value as pounds
@@ -68,12 +49,9 @@ public class PipeTypeOne extends Pipe
         {
            price = this._priceForPlastic * 1.12;
         }
-        price += getPriceForColour();
+        price += this._priceForPlastic * this._colour.getValue();
         return price;
 
     }
-//    public void setPipeColour(PipeColour pipeColour)
-//    {
-//         this._ePipeColour = pipeColour;
-//    }
+
 }

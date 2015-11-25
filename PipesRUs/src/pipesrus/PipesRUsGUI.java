@@ -13,11 +13,9 @@ import pipesrus.Models.*;
 import java.util.*;
 import pipesrus.Interface.PipesRUsTable;
 import java.lang.reflect.*;
-import javax.imageio.ImageIO;
 import pipesrus.PriceEngine.*;
 import javax.swing.table.*;
 import java.io.*;
-import pipesrus.misc.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -52,8 +50,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
         super();
         try {
-            File icon = new File("pipe.ico");
-            this.setIconImage(ImageIO.read(icon));
+
             //*INITMENUBAR* must be called before altering other GUI stuff
             initMenuBar();
 
@@ -83,16 +80,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         userWindow = Toolkit.getDefaultToolkit().getScreenSize();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
-        //////////////////////////////////// exp ////////////////////////
-//        Object [][] tableArray =
-//                new String[][]{{"Hell","O", "O"}, {"Hell","O", "O"}, {"Row Three", "F", "F"}};
-//        
-//        openTableWindow(tableArray);
-        //////////////////////////////////////// exp //////////////////////
-        //throw new UnsupportedOperationException("Not yet implemented");
         initInformationScreenWithModel(new PipeModel());
         initOrderScreen();
-        //initInterface();
 
         this.setSize((int) Math.floor(userWindow.width * 0.8),
                 (int) Math.floor(userWindow.height * 0.8));
@@ -147,16 +136,16 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     {
         processKey(e);
     }
+
     private String writeStringToFile(String textToWrite) throws Exception
     {
         System.out.println("Writing to file");
         Calendar cal = Calendar.getInstance();
         String filename = cal.get(Calendar.DAY_OF_MONTH) + cal.get(Calendar.MONTH)
-                + cal.get(Calendar.YEAR)+ "-" + UUID.randomUUID().toString()+".txt";
+                + cal.get(Calendar.YEAR) + "-" + UUID.randomUUID().toString() + ".txt";
         File textFile = new File(filename);
         textFile.createNewFile();
-        if(!textFile.canWrite())
-        {
+        if (!textFile.canWrite()) {
             throw new Exception("Cannot write to text file");
         }
         FileWriter fw = new FileWriter(textFile.getAbsoluteFile());
@@ -164,10 +153,21 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         bw.write(textToWrite, 0, textToWrite.length());
         bw.close();
         fw.close();
-        
+
         return filename;
-        
+
     }
+    private void lockQuoteScreen()
+    {
+        this.mainInterface.setSelectedIndex(0);
+        this.mainInterface.setEnabledAt(1, false);
+    }
+    private void noPipes()
+    {
+        JOptionPane.showMessageDialog(this, "No pipes to remove");
+        lockQuoteScreen();
+    }
+
     /**
      *
      * @param evnt
@@ -186,11 +186,11 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
                 case "Add":
                     PipeModel model = this.tryUpdateModel();
-                     //append to linkedList
-                    
+                    //append to linkedList
+                    if(model == null)
+                        break;
                     updateRunningTotal(model.getValue()); //add price to order total
                     double value = new BigDecimal(model.getValue()).setScale(2, RoundingMode.HALF_UP).doubleValue();
-                    
 
                     this.tableModel.addRow(new Object[]{
                         model.getPipeGrade(),
@@ -198,10 +198,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                         model.getInsulated(),
                         model.getReinforced(),
                         model.getLength(),
-                        "£"+value
+                        "£" + value
                     });
-
-                    
 
                     break;
 
@@ -219,40 +217,40 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     this.mainInterface.setEnabledAt(1, true);
                     break;
                 case "Remove last pipe":
-                    if(modelList.size() == 0)
-                    {
-                        JOptionPane.showMessageDialog(this, "No pipes to remove");
-                        break;
+                    if (modelList.size() == 0) {
+                        noPipes();
                     }
                     Pipe removedPipe = (Pipe) this.modelList.removeLast();
-                    ((DefaultTableModel)this.summaryTable.getModel()).removeRow(modelList.size()+1);
+                    ((DefaultTableModel) this.summaryTable.getModel()).removeRow(modelList.size() + 1);
                     //minus is important here
                     updateRunningTotal(-removedPipe.getPrice());
+                    if (modelList.size() == 0)
+                        lockQuoteScreen();
                     break;
                 case "Clear order":
-                    for(int i = 0; i < this.modelList.size(); i++)
-                    {
-                        this.tableModel.removeRow(i+1);
+                    if (this.modelList.size() == 0) {
+                        noPipes();
+                    }
+                    int size = modelList.size();
+                    this.modelList.clear();
+
+                    for (int index = size; index > 0; index--) {
+                        this.tableModel.removeRow(index);
                         updateRunningTotal(-this.runningTotal);
                     }
-                    
-                    this.modelList.clear();
-                    this.mainInterface.setSelectedIndex(0);
-                    this.mainInterface.setEnabledAt(1, false);
+                    lockQuoteScreen();    
                     break;
                 case "Write to file":
                     String textToFile = "";
-                    for(int row = 0; row < this.tableModel.getRowCount(); row++)
-                    {
-                        for(int col = 0; col < this.tableModel.getColumnCount(); col++)
-                        {
+                    for (int row = 0; row < this.tableModel.getRowCount(); row++) {
+                        for (int col = 0; col < this.tableModel.getColumnCount(); col++) {
                             System.out.println(textToFile);
                             textToFile += " " + this.tableModel.getValueAt(row, col);
-                            
+
                         }
                         textToFile += "\n";
                     }
-                    JOptionPane.showMessageDialog(this,"File name: "+ writeStringToFile(textToFile));
+                    JOptionPane.showMessageDialog(this, "File name: " + writeStringToFile(textToFile));
                     break;
                 default:
                     break;
@@ -261,11 +259,14 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             swallowError(ex);
         }
     }
+
     private void updateRunningTotal(double value)
     {
-        this.runningTotal += new BigDecimal(value).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        this.tableModel.setValueAt("£"+ this.runningTotal, 0, 5); //sets the 'Total' cell to the sum of all pipe prices
+        this.runningTotal += value;
+        this.runningTotal = new BigDecimal(runningTotal).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        this.tableModel.setValueAt("£" + this.runningTotal, 0, 5); //sets the 'Total' cell to the sum of all pipe prices
     }
+
     private JButton createAndReturnJButtonWithName(String name)
     {
         JButton newButton = new JButton(name);
@@ -283,16 +284,15 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         this.summaryTable.setColumnSelectionAllowed(false);
         JPanel orderPanel = new JPanel(new BorderLayout());
         JPanel orderButtons = new JPanel(new FlowLayout());
-        
+
         orderPanel.setBorder(BorderFactory.createTitledBorder("Order Summary"));
         orderButtons.setBorder(BorderFactory.createTitledBorder("Controls"));
-        
+
         orderPanel.add(new JScrollPane(this.summaryTable), BorderLayout.CENTER);
         orderButtons.add(createAndReturnJButtonWithName("Remove last pipe"));
         orderButtons.add(createAndReturnJButtonWithName("Clear order"));
         orderButtons.add(createAndReturnJButtonWithName("Write to file"));
-        
-        
+
         this.paymentTab.add(orderButtons, BorderLayout.SOUTH);
         this.paymentTab.add(orderPanel, BorderLayout.CENTER);
         this.tableModel = (DefaultTableModel) this.summaryTable.getModel();
@@ -357,7 +357,6 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             return model;
         } catch (Exception ex) {
             swallowError(ex);
-            this.components.get("Submit").setEnabled(false);
             return null;
         }
 
@@ -475,6 +474,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     enclosingPanel.add(new JLabel(member.getName()));
 
                     Object[] eMembers = memberType.getEnumConstants();
+                    centrePanel.add(new JLabel(memberHumanName + ":"));
                     newComponent = new JComboBox(eMembers);
                     enclosingPanel.add(newComponent);
                     centrePanel.add(newComponent);
