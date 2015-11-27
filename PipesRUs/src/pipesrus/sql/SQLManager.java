@@ -7,8 +7,8 @@ package pipesrus.sql;
 
 import java.sql.*;
 import pipesrus.Models.PipeModel;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.*;
+import java.text.*;
 
 /**
  *
@@ -27,23 +27,23 @@ public class SQLManager {
         localConn = DriverManager.getConnection("jdbc:sqlite:.\\db\\local.db");
 
     }
+
     private String appendColumns(String[] columns)
     {
         StringBuilder appendedColumns = new StringBuilder();
-        if(columns != null)
-        {
+        if (columns != null) {
             appendedColumns.append(" (");
-            for (String column : columns) 
-            {
+            for (String column : columns) {
                 appendedColumns.append(column);
             }
             appendedColumns.append(") ");
-        }
-        else
+        } else {
             appendedColumns.append(" * ");
-        
+        }
+
         return appendedColumns.toString();
     }
+
     private ResultSet selectFrom(String table,
             String[] columns)
             throws SQLException
@@ -51,13 +51,13 @@ public class SQLManager {
         StringBuilder sqlStmt = new StringBuilder("SELECT ");
         sqlStmt.append(table);
         sqlStmt.append(appendColumns(columns));
-        
+
         sqlStmt.append("FROM ");
         sqlStmt.append(table);
-        
+
         return localConn.createStatement().executeQuery(sqlStmt.toString());
     }
-    
+
     private ResultSet selectFrom(String table,
             String[] columns, HashMap<String, Object> columnValuePairs)
             throws SQLException
@@ -80,7 +80,7 @@ public class SQLManager {
         return localConn.createStatement().executeQuery(sqlStmt.toString());
 
     }
-    
+
     private ResultSet insertInto(String table,
             String[] columns,
             Object[] params)
@@ -118,37 +118,38 @@ public class SQLManager {
     {
         return new Integer(bool ? 1 : 0).toString();
     }
-    private void insertPipe(PipeModel pipe) throws Exception
+
+    private long insertPipe(PipeModel pipe) throws Exception
     {
-        String [] columns = new String [] {"Grade", "Colour", "Insulated", "Reinforced", "ChemicalResistance"};
+        String[] columns = new String[]{"Grade", "Colour", "Insulated", "Reinforced", "ChemicalResistance"};
         HashMap<String, Object> columnValues = new HashMap<>();
         columnValues.put("Grade", pipe.getPipeGrade());
         columnValues.put("Colour", pipe.getPipeColour().toString());
         columnValues.put("Insulated", boolToInt(pipe.getInsulated()));
         columnValues.put("Reinforced", boolToInt(pipe.getReinforced()));
         columnValues.put("ChemicalResistance", boolToInt(pipe.getChemicalResistance()));
-        ResultSet alreadyAPipe = selectFrom("Pipe", columns , columnValues);
-
+        ResultSet alreadyAPipe = selectFrom("Pipe", columns, columnValues);
         PreparedStatement stmt;
-        if(alreadyAPipe == null)
-        {
-            insertInto("Pipe", 
+
+        long pipeID;
+        if (alreadyAPipe == null) {
+            pipeID = insertInto("Pipe", columns, new String[]{pipe.getPipeGrade().toString(), pipe.getPipeColour().toString(),
+                boolToInt(pipe.getInsulated()), boolToInt(pipe.getReinforced()), boolToInt(pipe.getChemicalResistance())}).getLong(1);
+        } else {
+            pipeID = alreadyAPipe.getLong(1);
         }
-        else
-        {
-            
-        }
-        
-            
-        
+
+        return pipeID;
     }
+
     public void insertPipeArray(PipeModel[] pipes, Integer customerID) throws Exception
     {
-
-        if (selectFrom("Customer",
-                new String[]{"CustomerID"}, 
-                new String[]{customerID.toString()}) == null) 
-        {
+        HashMap<String, Object> whereClause = new HashMap<>();
+        whereClause.put("CustomerID", customerID);
+        ResultSet checkForCustomer = selectFrom("Customer",
+                new String[]{"CustomerID"},
+                whereClause);
+        if (checkForCustomer == null) {
             throw new Exception("Customer does not exist");
         }
 
@@ -159,15 +160,26 @@ public class SQLManager {
         stmt.setInt(1, customerID);
 
         stmt.execute();
-        
-        long orderID = stmt.getGeneratedKeys().getLong(1);
-        
-        
-        for(PipeModel pipe : pipes)
-        {
-            
+
+        Long orderID = stmt.getGeneratedKeys().getLong(1);
+
+        ArrayList<Long> pipesOrdered = new ArrayList<>();
+        for (PipeModel pipe : pipes) {
+            Long pipeID = insertPipe(pipe);
+            pipesOrdered.add(pipeID);
         }
+        String[] colummns = new String[]{"OrderID", "PipeID", "OrderedDate"};
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
+        df.setTimeZone(tz);
+        String ISODate = df.format(new java.util.Date());
+        for (Long pipeID : pipesOrdered) {
             
+            insertInto("ProductOrdered", colummns,
+                    new String[]{orderID.toString(),
+                        pipeID.toString(),
+                        ISODate});
+        }
 
     }
 }
