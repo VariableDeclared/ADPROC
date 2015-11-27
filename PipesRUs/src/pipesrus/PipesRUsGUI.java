@@ -200,7 +200,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                         break;
                     updateRunningTotal(model.getValue()); //add price to order total
                     double value = new BigDecimal(model.getValue()).setScale(2, RoundingMode.HALF_UP).doubleValue();
-
+                    
                     this.tableModel.addRow(new Object[]{
                         model.getPipeGrade(),
                         model.getPipeColour(),
@@ -257,11 +257,12 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     InfoDialog dialog = new InfoDialog("Enter customer ID",
                             "Please enter the ID of the customer",
                             "The customer ID can be found on the database, please ask IT support for further help");
+                    dialog.setModal(true);
                     dialog.setVisible(true);
                     String responseText = dialog.getResponse();
                     
                     
-                    this.pipeDatabaseManager.insertPipeArray((PipeModel[])this.modelList.toArray(), 
+                    this.pipeDatabaseManager.insertPipeArray(this.modelList.toArray(new PipeModel[this.modelList.size()]), 
                             new Integer(responseText));
                     break;
                 default:
@@ -390,6 +391,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             Pipe pipe = this.engine.getPipeForModel(model);
             double value = pipe.getPrice();
             model.setValue(value);
+            model.setVolume(pipe.getVolume());
             pipeList.add(pipe);
             modelList.add(model);
 
@@ -459,8 +461,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             case "notify all":
             case "class":
             case "to string":
-            case "voloume":
-            case "voolume":
+            case "volume":
             case "price":
             case "value":
 

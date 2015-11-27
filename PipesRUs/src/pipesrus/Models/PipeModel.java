@@ -55,6 +55,14 @@ public class PipeModel extends Model {
 //        double radius = diameter / 2;
 //        this.volume = Math.PI * (radius * radius) * length;
     }
+    public double getVolume()
+    {
+        return this.volume;
+    }
+    public void setVolume(double volume)
+    {
+        this.volume = volume;
+    }
     public PipeColour getPipeColour()
     {
         return this.pipeColour;
