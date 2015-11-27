@@ -146,7 +146,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         File textFile = new File(filename);
         textFile.createNewFile();
         if (!textFile.canWrite()) {
-            throw new Exception("Cannot write to text file");
+            throw new Exception("Cannot write to text file");writeStringToFile
         }
         FileWriter fw = new FileWriter(textFile.getAbsoluteFile());
         BufferedWriter bw = new BufferedWriter(fw);
@@ -241,15 +241,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     lockQuoteScreen();    
                     break;
                 case "Write to file":
-                    String textToFile = "";
-                    for (int row = 0; row < this.tableModel.getRowCount(); row++) {
-                        for (int col = 0; col < this.tableModel.getColumnCount(); col++) {
-                            System.out.println(textToFile);
-                            textToFile += " " + this.tableModel.getValueAt(row, col);
-
-                        }
-                        textToFile += "\n";
-                    }
+                    String textToFile = getTextForOrder();
                     JOptionPane.showMessageDialog(this, "File name: " + writeStringToFile(textToFile));
                     break;
                 default:
@@ -258,6 +250,19 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         } catch (Exception ex) {
             swallowError(ex);
         }
+    }
+    private String getTextForOrder()
+    {
+        String textToFile = "";
+                    for (int row = 0; row < this.tableModel.getRowCount(); row++) {
+                        for (int col = 0; col < this.tableModel.getColumnCount(); col++) {
+                            
+                            textToFile += " " + this.tableModel.getValueAt(row, col);
+
+                        }
+                        textToFile += "\n";
+                    }
+                    return textToFile;
     }
 
     private void updateRunningTotal(double value)

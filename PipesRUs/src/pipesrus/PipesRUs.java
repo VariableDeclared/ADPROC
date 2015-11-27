@@ -7,7 +7,7 @@ package pipesrus;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-
+import pipesrus.sql.SQLManager;
 /**
  *
  * @author UP738106
@@ -25,6 +25,12 @@ public class PipesRUs {
             System.out.println(icon.getDescription());
             gui.setIconImage(icon.getImage());
             gui.setVisible(true);
+            
+            
+            
+            //TEST
+            
+            SQLManager manager = new SQLManager();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getClass().toString() + " "+ ex.getMessage());
         }

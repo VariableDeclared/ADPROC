@@ -1,0 +1,32 @@
+
+CREATE TABLE `ProductOrderedID` (
+	`ProductOrderedID`	INTEGER NOT NULL,
+	`OrderID`	INTEGER NOT NULL,
+	`PipeID`	INTEGER NOT NULL,
+	`OrderedDate` DATE NOT NULL,
+	FOREIGN KEY(OrderID) REFERENCES PipeOrder(OrderID),
+	FOREIGN KEY(PipeID) REFERENCES Pipe(PipeID),
+	PRIMARY KEY(ProductOrderedID)
+);
+CREATE TABLE `PipeOrder` (
+	`OrderID`	INTEGER NOT NULL,
+	`CustomerID`	INTEGER NOT NULL,
+	FOREIGN KEY(CustomerID) REFERENCES Customer(CustomerID),
+	PRIMARY KEY(OrderID)
+);
+CREATE TABLE `Pipe` (
+	`PipeID`	INTEGER NOT NULL,
+	`pType`	INTEGER NOT NULL,
+	`Grade`	INTEGER NOT NULL,
+	`Colour`	TEXT NOT NULL,
+	`Insulated`	INTEGER NOT NULL,
+	`Reinforced`	INTEGER NOT NULL,
+	`ChecmicalResistance`	INTEGER NOT NULL,
+	PRIMARY KEY(PipeID)
+);
+CREATE TABLE `Customer` (
+	`CustomerID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`Name`	TEXT NOT NULL,
+	`AccNo`	TEXT NOT NULL
+);
+
