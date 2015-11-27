@@ -9,6 +9,7 @@ import java.sql.*;
 import pipesrus.Models.PipeModel;
 import java.util.*;
 import java.text.*;
+import javax.swing.table.*;
 
 /**
  *
@@ -24,7 +25,7 @@ public class SQLManager {
         Connection c = null;
 
         //creates or opens a local database
-        localConn = DriverManager.getConnection("jdbc:sqlite:.\\db\\local.db");
+        localConn = DriverManager.getConnection("jdbc:sqlite:.\\db\\pipesrusdb");
 
     }
 
@@ -182,4 +183,37 @@ public class SQLManager {
         }
 
     }
+    
+    public TableModel getPipeOrders() throws SQLException
+    {
+        String sql = "SELECT * FROM PipeOrder p "
+                + "JOIN ProductOrdered po ON p.OrderID = po.OrderID "
+                + "JOIN Pipe pp ON pp.PipeID = po.PipeID "
+                + "JOIN Customer c ON c.CustomerID = p.OrderID";
+        
+        ResultSet results = localConn.createStatement().executeQuery(sql);
+        ResultSetMetaData metaData = results.getMetaData();
+
+        // names of columns
+        Vector<String> columnNames = new Vector<String>();
+        int columnCount = metaData.getColumnCount();
+        for (int column = 1; column <= columnCount; column++) {
+            columnNames.add(metaData.getColumnName(column));
+        }
+
+        // data of the table
+        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        while (results.next()) {
+            Vector<Object> row = new Vector<Object>();
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                row.add(results.getObject(columnIndex));
+                //System.out.println(results.getObject(columnIndex));
+            }
+            data.add(row);
+        }
+        
+        return new DefaultTableModel(data, columnNames);
+
+    }
+    
 }
