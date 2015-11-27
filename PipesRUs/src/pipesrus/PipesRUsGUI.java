@@ -391,6 +391,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     {
         toParse = toParse.replace("get", "");
         toParse = toParse.replace("_", " ");
+        
         StringBuilder returnString = new StringBuilder();
         for (char c : toParse.toCharArray()) {
             String sqChar = new String(new char[]{
@@ -403,6 +404,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                 returnString.append(c);
             }
         }
+        
+        
         return returnString.toString();
     }
 
@@ -428,7 +431,16 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
         return returnval;
     }
-
+    private Object [] enumMembersToString(Object[] memberNames)
+    {
+        ArrayList<String> returnNames = new ArrayList<>();
+        for(Object name : memberNames)
+        {
+            returnNames.add(parseWords(name.toString()));
+        }
+        
+        return returnNames.toArray();
+    }
     /**
      * Initialize the interface with the model and it's types.
      *
@@ -475,7 +487,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
                     Object[] eMembers = memberType.getEnumConstants();
                     centrePanel.add(new JLabel(memberHumanName + ":"));
-                    newComponent = new JComboBox(eMembers);
+                    newComponent = new JComboBox(enumMembersToString(eMembers));
                     enclosingPanel.add(newComponent);
                     centrePanel.add(newComponent);
                 }
