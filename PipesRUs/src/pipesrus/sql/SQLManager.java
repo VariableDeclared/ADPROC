@@ -84,22 +84,25 @@ public class SQLManager {
             if(it.hasNext())
                 sqlStmt.append(" AND ");
         }
-        System.out.println(sqlStmt.toString());
-        ResultSet rs = localConn.createStatement().executeQuery(sqlStmt.toString());
+        //System.out.println(sqlStmt.toString());
+        Statement stmt = localConn.createStatement();
+        ResultSet rs = stmt.executeQuery(sqlStmt.toString());
         
         
-        if(rs == null)
+        if(!rs.next())
+        {
             return 0;
+        }
         else
         {
             //Error around here...
-            PEACE OUT
+            //PEACE OUT
             return rs.getLong(1);
         }
 
     }
 
-    private ResultSet insertInto(String table,
+    private long insertInto(String table,
             String[] columns,
             Object[] params)
             throws Exception
@@ -107,29 +110,44 @@ public class SQLManager {
         StringBuilder sqlStmt = new StringBuilder("INSERT INTO ");
         sqlStmt.append(table);
         sqlStmt.append(" (");
-        for (String column : columns) {
-            sqlStmt.append(column);
+        for (int i = 0; i < columns.length; i++) {
+            if(i != 0)
+                sqlStmt.append(",");
+            sqlStmt.append(columns[i]);
+            
         }
         sqlStmt.append(") VALUES(");
-
-        for (Object param : params) {
-            sqlStmt.append("?");
-            if (!params[params.length].equals(param)) {
+        
+        for (int i = 0; i < params.length; i++) {
+            if (i != 0) {
                 sqlStmt.append(",");
             }
+            sqlStmt.append("?");
+            
         }
-
+        
         sqlStmt.append(")");
-        System.out.println(sqlStmt.toString());
+         //System.out.println(sqlStmt.toString());
         PreparedStatement stmt = localConn.prepareStatement(sqlStmt.toString());
-
+        if(stmt == null)
+            throw new Exception("Statement is null");
+        
         for (int i = 0; i < params.length; i++) {
             stmt.setObject(i + 1, params[i]);
         }
-
+        
         stmt.execute();
-
-        return stmt.getResultSet();
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        if(rs == null)
+            throw new Exception("Result set is null");
+        if(rs.next())
+        {
+            return rs.getLong(1);
+        }
+        else
+            return 0;
+        
     }
 
     private String boolToInt(boolean bool)
@@ -147,17 +165,19 @@ public class SQLManager {
         columnValues.put("Reinforced", boolToInt(pipe.getReinforced()));
         columnValues.put("ChemicalResistance", boolToInt(pipe.getChemicalResistance()));
         columnValues.put("PipeVolume", pipe.getVolume());
-        System.out.println("Selecting a pipe");
+         //System.out.println("Selecting a pipe");
         long pipeID = selectFrom("Pipe", columns, columnValues);
-        System.out.println("Going to see if there is a pipe");
+         //System.out.println("Going to see if there is a pipe");
         
         
         if (pipeID == 0)
         {
+             //System.out.println("Inserting new pipe");
             pipeID = insertInto("Pipe", columns, new String[]{pipe.getPipeGrade().toString(), pipe.getPipeColour().toString(),
-                boolToInt(pipe.getInsulated()), boolToInt(pipe.getReinforced()), boolToInt(pipe.getChemicalResistance())}).getLong(1);
+                boolToInt(pipe.getInsulated()), boolToInt(pipe.getReinforced()), boolToInt(pipe.getChemicalResistance()), pipe.getVolume().toString()});
+
         }
-        
+         //System.out.println("Returning: " + pipeID);
         return pipeID;
     }
 
@@ -170,14 +190,14 @@ public class SQLManager {
         }
         HashMap<String, Object> whereClause = new HashMap<>();
         whereClause.put("CustomerID", customerID);
-        System.out.println("Checking for customer");
+         //System.out.println("Checking for customer");
         long id = selectFrom("Customer",
                 new String[]{"CustomerID"},
                 whereClause);
         if (id == 0) {
             throw new Exception("Customer does not exist");
         }
-        System.out.println("Creating Order");
+         //System.out.println("Creating Order");
         String sql = "INSERT INTO PipeOrder(CustomerID) VALUES(?)";
 
         PreparedStatement stmt = localConn.prepareStatement(sql);
@@ -185,16 +205,16 @@ public class SQLManager {
         stmt.setInt(1, customerID);
 
         stmt.execute();
-        System.out.println("Going to insert into orders");
+         //System.out.println("Going to insert into orders");
         Long orderID = stmt.getGeneratedKeys().getLong(1);
 
         ArrayList<Long> pipesOrdered = new ArrayList<>();
         for (PipeModel pipe : pipes) {
-            System.out.println("Iterating");
+             //System.out.println("Iterating");
             Long pipeID = insertPipe(pipe);
             pipesOrdered.add(pipeID);
         }
-        System.out.println("Going to insert into orders");
+
         String[] colummns = new String[]{"OrderID", "PipeID", "OrderedDate"};
         TimeZone tz = TimeZone.getTimeZone("UTC");
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mmZ");
@@ -210,12 +230,12 @@ public class SQLManager {
 
     }
     
-    public TableModel getPipeOrders() throws SQLException
+    public DefaultTableModel getPipeOrders() throws SQLException
     {
         String sql = "SELECT * FROM PipeOrder p "
                 + "JOIN ProductOrdered po ON p.OrderID = po.OrderID "
                 + "JOIN Pipe pp ON pp.PipeID = po.PipeID "
-                + "JOIN Customer c ON c.CustomerID = p.OrderID";
+                + "JOIN Customer c ON c.CustomerID = p.CustomerID";
         
         ResultSet results = localConn.createStatement().executeQuery(sql);
         ResultSetMetaData metaData = results.getMetaData();

@@ -1,4 +1,4 @@
-BEGIN TRANSACTION;
+
 CREATE TABLE "ProductOrdered" (
 	`ProductOrderedID`	INTEGER NOT NULL,
 	`OrderID`	INTEGER NOT NULL,
@@ -36,4 +36,4 @@ CREATE TABLE "Customer" (
 	`AccNo`	TEXT NOT NULL
 );
 INSERT INTO `Customer` (CustomerID,Name,AccNo) VALUES (1,'Peter','0000');
-COMMIT;
+

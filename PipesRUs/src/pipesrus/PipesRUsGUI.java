@@ -48,12 +48,13 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private LinkedList<PipeModel> modelList;
     private Double runningTotal = 0.0;
     private SQLManager pipeDatabaseManager;
+    private DefaultTableModel databaseTableModel;
 
     public PipesRUsGUI()
     {
 
         super();
-        
+
         try {
 
             //*INITMENUBAR* must be called before altering other GUI stuff
@@ -69,10 +70,10 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
         this.customerOrdersTab = new JPanel();
         this.customerOrdersTab.setLayout(new BorderLayout());
-        
+
         this.informationTab = new JPanel();
         this.paymentTab = new JPanel(new BorderLayout());
-        
+
         this.mainInterface = new JTabbedPane();
         this.mainInterface.addTab("Information", this.informationTab);
         this.mainInterface.addTab("Order Summary", this.paymentTab);
@@ -93,7 +94,6 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         initCustomerOrderScreen();
         this.setSize((int) Math.floor(userWindow.width * 0.8),
                 (int) Math.floor(userWindow.height * 0.8));
-        
 
     }
 
@@ -166,11 +166,13 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         return filename;
 
     }
+
     private void lockQuoteScreen()
     {
         this.mainInterface.setSelectedIndex(0);
         this.mainInterface.setEnabledAt(1, false);
     }
+
     private void noPipes()
     {
         JOptionPane.showMessageDialog(this, "No pipes to remove");
@@ -196,11 +198,12 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                 case "Add":
                     PipeModel model = this.tryUpdateModel();
                     //append to linkedList
-                    if(model == null)
+                    if (model == null) {
                         break;
+                    }
                     updateRunningTotal(model.getValue()); //add price to order total
                     double value = new BigDecimal(model.getValue()).setScale(2, RoundingMode.HALF_UP).doubleValue();
-                    
+
                     this.tableModel.addRow(new Object[]{
                         model.getPipeGrade(),
                         model.getPipeColour(),
@@ -233,8 +236,9 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     ((DefaultTableModel) this.summaryTable.getModel()).removeRow(pipeList.size() + 1);
                     //minus is important here
                     updateRunningTotal(-removedPipe.getPrice());
-                    if (pipeList.size() == 0)
+                    if (pipeList.size() == 0) {
                         lockQuoteScreen();
+                    }
                     break;
                 case "Clear order":
                     if (this.pipeList.size() == 0) {
@@ -247,23 +251,26 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                         this.tableModel.removeRow(index);
                         updateRunningTotal(-this.runningTotal);
                     }
-                    lockQuoteScreen();    
+                    lockQuoteScreen();
                     break;
                 case "Write to file":
                     String textToFile = getTextForOrder();
                     JOptionPane.showMessageDialog(this, "File name: " + writeStringToFile(textToFile));
                     break;
-                case "Commit To Local DB":
+                case "Commit to Local DB":
                     InfoDialog dialog = new InfoDialog("Enter customer ID",
                             "Please enter the ID of the customer",
                             "The customer ID can be found on the database, please ask IT support for further help");
                     dialog.setModal(true);
                     dialog.setVisible(true);
                     String responseText = dialog.getResponse();
-                    
-                    
-                    this.pipeDatabaseManager.insertPipeArray(this.modelList.toArray(new PipeModel[this.modelList.size()]), 
+
+                    this.pipeDatabaseManager.insertPipeArray(this.modelList.toArray(new PipeModel[this.modelList.size()]),
                             new Integer(responseText));
+                    break;
+                case "Refresh Table":
+                    this.databaseTableModel.fireTableDataChanged();
+                    
                     break;
                 default:
                     break;
@@ -272,30 +279,32 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             swallowError(ex);
         }
     }
+
     private void initCustomerOrderScreen()
     {
-        try{
-        this.customerOrdersTab.add(new JScrollPane(new JTable(pipeDatabaseManager.getPipeOrders())), BorderLayout.CENTER);
-       }
-        catch(Exception ex)
-        {
+        try {
+            this.databaseTableModel = pipeDatabaseManager.getPipeOrders();
+
+            this.customerOrdersTab.add(new JScrollPane(new JTable(this.databaseTableModel)), BorderLayout.CENTER);
+        } catch (Exception ex) {
             swallowError(ex);
         }
-        
-        
+        this.customerOrdersTab.add(createAndReturnJButtonWithName("Refresh Table"), BorderLayout.SOUTH);
+
     }
+
     private String getTextForOrder()
     {
         String textToFile = "";
-                    for (int row = 0; row < this.tableModel.getRowCount(); row++) {
-                        for (int col = 0; col < this.tableModel.getColumnCount(); col++) {
-                            
-                            textToFile += " " + this.tableModel.getValueAt(row, col);
+        for (int row = 0; row < this.tableModel.getRowCount(); row++) {
+            for (int col = 0; col < this.tableModel.getColumnCount(); col++) {
 
-                        }
-                        textToFile += "\n";
-                    }
-                    return textToFile;
+                textToFile += " " + this.tableModel.getValueAt(row, col);
+
+            }
+            textToFile += "\n";
+        }
+        return textToFile;
     }
 
     private void updateRunningTotal(double value)
@@ -317,8 +326,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         this.summaryTable = new PipesRUsTable(new PipesRUsTableModel(new String[][]{{"", "", "", "", "", "£0.00"}},
                 new String[]{"Pipe Grade", "Colour", "Inner Insulation", "Outer Reinforcement", "Total Length", "Total Value"}));
 
-        System.out.println("Setting table model");
-
+        //System.out.println("Setting table model");
         this.summaryTable.setColumnSelectionAllowed(false);
         JPanel orderPanel = new JPanel(new BorderLayout());
         JPanel orderButtons = new JPanel(new FlowLayout());
@@ -330,6 +338,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         orderButtons.add(createAndReturnJButtonWithName("Remove last pipe"));
         orderButtons.add(createAndReturnJButtonWithName("Clear order"));
         orderButtons.add(createAndReturnJButtonWithName("Write to file"));
+        orderButtons.add(createAndReturnJButtonWithName("Commit to Local DB"));
 
         this.paymentTab.add(orderButtons, BorderLayout.SOUTH);
         this.paymentTab.add(orderPanel, BorderLayout.CENTER);
@@ -413,7 +422,11 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private void swallowError(Exception ex)
     {
         //improve this at a later date.
-        JOptionPane.showMessageDialog(this, "Something went wrong \n" + ex.getMessage(), "Error", JOptionPane.OK_OPTION);
+        JOptionPane.showMessageDialog(this, "Something went wrong \n"
+                + ex.getMessage() + "\n"
+                + ex.getClass().toGenericString(),
+                "Error",
+                JOptionPane.OK_OPTION);
 
     }
 
@@ -432,7 +445,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     {
         toParse = toParse.replace("get", "");
         toParse = toParse.replace("_", " ");
-        
+
         StringBuilder returnString = new StringBuilder();
         for (char c : toParse.toCharArray()) {
             String sqChar = new String(new char[]{
@@ -445,8 +458,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                 returnString.append(c);
             }
         }
-        
-        
+
         return returnString.toString();
     }
 
@@ -471,16 +483,17 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
         return returnval;
     }
-    private Object [] enumMembersToString(Object[] memberNames)
+
+    private Object[] enumMembersToString(Object[] memberNames)
     {
         ArrayList<String> returnNames = new ArrayList<>();
-        for(Object name : memberNames)
-        {
+        for (Object name : memberNames) {
             returnNames.add(parseWords(name.toString()));
         }
-        
+
         return returnNames.toArray();
     }
+
     /**
      * Initialize the interface with the model and it's types.
      *
@@ -560,15 +573,6 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         this.components.put("Submit", submit);
         southPanel.add(submit);
 
-        
-        JButton commitToLocalDB = createAndReturnJButtonWithName("Commit To Local DB");
-        this.components.put("Commit To Local DB", commitToLocalDB);
-        southPanel.add(commitToLocalDB);
-        
-        
-        
-        
-        
         southPanel.setBorder(BorderFactory.createTitledBorder("Controls"));
     }
 

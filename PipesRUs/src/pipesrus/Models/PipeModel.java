@@ -55,7 +55,7 @@ public class PipeModel extends Model {
 //        double radius = diameter / 2;
 //        this.volume = Math.PI * (radius * radius) * length;
     }
-    public double getVolume()
+    public Double getVolume()
     {
         return this.volume;
     }
