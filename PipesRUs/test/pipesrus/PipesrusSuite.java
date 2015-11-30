@@ -17,7 +17,7 @@ import org.junit.runners.Suite;
  * @author UP732011
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({pipesrus.PriceEngine.PriceEngineSuite.class, pipesrus.Models.ModelsSuite.class, pipesrus.PipesRUsTest.class, pipesrus.Interface.InterfaceSuite.class, pipesrus.PipesRUsGUITest.class})
+@Suite.SuiteClasses({pipesrus.PriceEngine.PriceEngineSuite.class, pipesrus.Models.ModelsSuite.class, pipesrus.PipesRUsTest.class, pipesrus.PipesRUsGUITest.class})
 public class PipesrusSuite {
 
     @BeforeClass

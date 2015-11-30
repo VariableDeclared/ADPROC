@@ -85,6 +85,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
 
         this.setSize((int) Math.floor(userWindow.width * 0.8),
                 (int) Math.floor(userWindow.height * 0.8));
+        this.pack();
 
     }
 
@@ -94,6 +95,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
         //this.setLayout(new FlowLayout());
         this.setSize((int) Math.floor(userWindow.width * sizePercentage),
                 (int) Math.floor(userWindow.height * sizePercentage));
+        this.pack();
 
     }
 
