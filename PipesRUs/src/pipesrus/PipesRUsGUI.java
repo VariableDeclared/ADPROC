@@ -19,6 +19,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import pipesrus.Interface.PipesRUsTextField;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -44,13 +45,15 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
     private JTable summaryTable;
     private DefaultTableModel tableModel;
     private LinkedList<Pipe> modelList;
+    private Image icon;
     private Double runningTotal = 0.0;
 
     public PipesRUsGUI() {
 
         super();
         try {
-
+            
+            this.setIconImage(this.icon);
             //*INITMENUBAR* must be called before altering other GUI stuff
             initMenuBar();
 
@@ -228,7 +231,9 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                         model.getLength(),
                         "£" + value
                     });
-
+                    JOptionPane.showMessageDialog(this, "Pipe added to order",
+                            "Added",
+                            JOptionPane.PLAIN_MESSAGE);
                     break;
 
                 case "Submit":
