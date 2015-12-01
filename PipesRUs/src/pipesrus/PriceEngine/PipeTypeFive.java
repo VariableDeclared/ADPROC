@@ -46,7 +46,7 @@ public class PipeTypeFive extends PipeTypeFour implements IOuterReinforcedPipe
         double price = super.getPrice();
         
         //outer reinforcement
-        price += this._priceForPlastic * 1.15;
+        price += this._priceForPlastic * 0.15;
         
         return price;
         
