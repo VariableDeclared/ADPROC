@@ -19,7 +19,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import pipesrus.sql.SQLManager;
-
+import pipesrus.Interface.InfoDialog;
 import pipesrus.Interface.PipesRUsTextField;
 
 /**
@@ -259,7 +259,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     //minus is important here
                     updateRunningTotal(-removedPipe.getPrice());
                     if (pipeList.size() == 0) {
-                        
+
                     }
                     ((DefaultTableModel) this.summaryTable.getModel()).removeRow(modelList.size() - 1);
                     //minus is important here
@@ -287,17 +287,17 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     JOptionPane.showMessageDialog(this, "File name: " + writeStringToFile(textToFile));
                     break;
                 case "Commit to Local DB":
-                    throw new UnsupportedOperationException("Info dialog not fixed");
-                   // InfoDialog dialog = new InfoDialog("Enter customer ID",
-//                            "Please enter the ID of the customer",
-//                            "The customer ID can be found on the database, please ask IT support for further help");
-//                    dialog.setModal(true);
-//                    dialog.setVisible(true);
-//                    String responseText = dialog.getResponse();
 
-//                    this.pipeDatabaseManager.insertPipeArray(this.modelList.toArray(new PipeModel[this.modelList.size()]),
-//                            new Integer(responseText));
-                   // break;
+                    InfoDialog dialog = new InfoDialog("Enter customer ID",
+                            "Please enter the ID of the customer",
+                            "The customer ID can be found on the database, please ask IT support for further help");
+                    dialog.setModal(true);
+                    dialog.setVisible(true);
+                    String responseText = dialog.getResponse();
+
+                    this.pipeDatabaseManager.insertPipeArray(this.modelList.toArray(new PipeModel[this.modelList.size()]),
+                            new Integer(responseText));
+                    break;
                 case "Refresh Table":
                     this.databaseTableModel.fireTableDataChanged();
 
@@ -309,7 +309,6 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             swallowError(ex);
         }
     }
-
 
     private void initCustomerOrderScreen() {
         try {
