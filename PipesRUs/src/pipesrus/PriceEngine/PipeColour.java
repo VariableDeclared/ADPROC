@@ -14,8 +14,8 @@ package pipesrus.PriceEngine;
 public enum PipeColour 
 {
     NO_COLOUR(0),
-    ONE_COLOUR(1.12),
-    TWO_COLOURS(1.17);
+    ONE_COLOUR(0.12),
+    TWO_COLOURS(0.17);
     
     
     private double value;
