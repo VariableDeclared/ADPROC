@@ -254,7 +254,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                         noPipes();
                     }
                     Pipe removedPipe = (Pipe) this.modelList.removeLast();
-                    ((DefaultTableModel) this.summaryTable.getModel()).removeRow(modelList.size() - 1);
+                    ((DefaultTableModel) this.summaryTable.getModel()).removeRow(modelList.size() + 1);
                     //minus is important here
                     updateRunningTotal(-removedPipe.getPrice());
                     if (modelList.size() == 0) {
@@ -262,16 +262,7 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                     }
                     break;
                 case "Clear order":
-                    if (this.modelList.size() == 0) {
-                        noPipes();
-                    }
-                    int size = modelList.size();
-                    this.modelList.clear();
-
-                    for (int index = size; index > 0; index--) {
-                        this.tableModel.removeRow(index);
-                        updateRunningTotal(-this.runningTotal);
-                    }
+                    clearOrder();
                     lockQuoteScreen();
                     break;
                 case "Write to file":
@@ -284,7 +275,8 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
                         }
                         textToFile += "\n";
                     }
-                    JOptionPane.showMessageDialog(this, "File name: " + writeStringToFile(textToFile));
+                    JOptionPane.showMessageDialog(this, "Order Submitted \n File name: " + writeStringToFile(textToFile));
+                    clearOrder();
                     break;
                 default:
                     break;
@@ -293,7 +285,19 @@ public class PipesRUsGUI extends JFrame implements ActionListener,
             swallowError(ex);
         }
     }
+    private void clearOrder()
+    {
+        if (this.modelList.size() == 0) {
+                        noPipes();
+                    }
+                    int size = modelList.size();
+                    this.modelList.clear();
 
+                    for (int index = size; index > 0; index--) {
+                        this.tableModel.removeRow(index);
+                        updateRunningTotal(-this.runningTotal);
+                    }
+    }
     private void updateRunningTotal(double value) {
         this.runningTotal += value;
         this.runningTotal = new BigDecimal(runningTotal).setScale(2, RoundingMode.HALF_UP).doubleValue();
